@@ -1,10 +1,21 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
-  title = 'ng-plugins';
+export class AppComponent implements OnInit {
+  data = 0;
+  title = '1212';
+  constructor(
+    private cdk: ChangeDetectorRef
+  ) {
+
+  }
+  ngOnInit() {
+    setInterval(() => {
+      this.data += Math.random() * 100;
+    }, 2000);
+  }
 }
