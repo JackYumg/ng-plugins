@@ -2,6 +2,10 @@
   "name": "ng-plugins",
   "version": "0.0.0",
   "description": "数字展示",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JackYumg/ng-digital.git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
