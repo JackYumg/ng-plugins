@@ -1,6 +1,6 @@
 {
   "name": "ng-plugins",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "description": "数字展示",
   "repository": {
     "type": "git",
@@ -13,7 +13,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod":"ng build --aot --prod"
+    "prod":"ng build --aot --prod",
+    "package": "ng build ng-digital --prod"
   },
   "private": true,
   "dependencies": {
