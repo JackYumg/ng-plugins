@@ -1,19 +1,19 @@
 <section class="code-box">
   <section class="code-box-demo">
-      <ng-content></ng-content>
+    <ng-content></ng-content>
   </section>
   <section class="code-box-meta">
-      <div class="code-box-title">
-        <a>数字插件</a>
-      </div>
-      <div class="code-box-descrition">
-        主要展示数字
-      </div>
-      <div class="code-box-actions">
-        <i nz-icon nzType="copy" nzTheme="outline" class="code-box-code-copy"></i>
-        &nbsp;
-        <i nz-icon nzType="edit" nzTheme="outline" class="code-box-code-copy" (click)="expand()"></i>
-      </div>
+    <div class="code-box-title">
+      <a>{{pluginDesc || '组件描述'}}</a>
+    </div>
+    <div class="code-box-descrition">
+      {{pluginDescDetail || '描述详情'}}
+    </div>
+    <div class="code-box-actions">
+      <i nz-icon nzType="copy" nzTheme="outline" class="code-box-code-copy"></i>
+      &nbsp;
+      <i nz-icon nzType="edit" nzTheme="outline" class="code-box-code-copy" (click)="expand()"></i>
+    </div>
   </section>
   <section class="highlight-wrapper" [class.expand]="codeExpand">
     <div class="highlight">
@@ -21,7 +21,8 @@
         <nz-tab [nzTitle]="file.name" style="height: 400px;" *ngFor="let file of fileList">
         </nz-tab>
       </nz-tabset>
-      <nz-code-editor *ngIf="checkItem" #codeEditorTpl class="editor" [ngModel]="checkItem.content" [nzEditorOption]="{ language: checkItem.lang}" [disabled]="true"></nz-code-editor>
+      <nz-code-editor *ngIf="checkItem" #codeEditorTpl class="editor" [ngModel]="checkItem.content"
+        [nzEditorOption]="{ language: checkItem.lang}" [disabled]="true"></nz-code-editor>
     </div>
   </section>
 </section>

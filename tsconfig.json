@@ -12,6 +12,10 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
+      "color-picker": [
+        "dist/color-picker/color-picker",
+        "dist/color-picker"
+      ],
       "ng-digital": [
         "dist/ng-digital/ng-digital",
         "dist/ng-digital"

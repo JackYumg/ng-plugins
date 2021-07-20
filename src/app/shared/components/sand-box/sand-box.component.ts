@@ -17,6 +17,10 @@ export class SandBoxComponent implements OnInit {
   codeEditorRef!: NzCodeEditorComponent;
   checkItem!: FileItem;
   codeExpand = false;
+  @Input()
+  pluginDesc = '';
+  @Input()
+  pluginDescDetail = '';
   constructor() { }
 
   ngOnInit(): void {

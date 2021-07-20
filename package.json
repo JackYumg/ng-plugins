@@ -6,6 +6,7 @@
     "type": "git",
     "url": "https://github.com/JackYumg/ng-digital.git"
   },
+  "homepage": "https://cqorccmm.cn/angular/ng-digital/plugins/appear/digital",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
