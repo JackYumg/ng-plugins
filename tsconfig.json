@@ -19,6 +19,10 @@
       "ng-digital": [
         "dist/ng-digital/ng-digital",
         "dist/ng-digital"
+      ],
+      "ng-editor-markdown": [
+        "dist/ng-editor-markdown/ng-editor-markdown",
+        "dist/ng-editor-markdown"
       ]
     },
     "experimentalDecorators": true,

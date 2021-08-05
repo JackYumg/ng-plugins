@@ -7,13 +7,16 @@ import { NgDigitalModule } from 'projects/ng-digital/src/public-api';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ColorPickerModule } from 'projects/color-picker/src/public-api';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MarkdownComponent } from './markdown/markdown.component';
+import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-api';
 
 
 @NgModule({
   declarations: [
     DigitalComponent,
-    ColorPickerComponent
+    ColorPickerComponent,
+    MarkdownComponent,
   ],
   imports: [
     CommonModule,
@@ -21,7 +24,9 @@ import { FormsModule } from '@angular/forms';
     NgDigitalModule,
     SharedModule,
     ColorPickerModule,
-    FormsModule
+    NgEditorMarkdownModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AppearModule { }

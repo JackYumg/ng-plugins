@@ -1,0 +1,46 @@
+.ng-editor-md {
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: column;
+
+    &.default {
+        width: 100%;
+        height: 600px;
+        border-radius: 5px;
+    }
+
+    &-toolbar {
+        height: 3rem;
+        line-height: 3rem;
+        border-bottom: 1px solid gainsboro;
+    }
+
+    &-workspace {
+        display: flex;
+        height: calc(100% - 3rem);
+
+        &-editor {
+            padding: 12px;
+            &:focus-visible {
+                outline: none;
+            }
+
+            &.default {
+                flex: 1;
+            }
+        }
+
+        &-display {
+            flex: 1;
+        }
+
+        &-split-line {
+            height: 100%;
+            width: 1px;
+
+            &.default {
+                background: gainsboro;
+            }
+        }
+    }
+}
