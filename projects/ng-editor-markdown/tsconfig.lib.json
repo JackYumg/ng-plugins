@@ -11,7 +11,10 @@
     "lib": [
       "dom",
       "es2018"
-    ]
+    ],
+    "paths": {
+      "@assets/*": ["src/assets/*"]
+    }
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,

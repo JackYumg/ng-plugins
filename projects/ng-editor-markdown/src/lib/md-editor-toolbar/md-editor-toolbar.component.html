@@ -1,3 +1,5 @@
 <ul class="md-editor-list">
-    <li class="md-eidtor-list-item"></li>
+    <li class="md-eidtor-list-item" *ngFor="let tool of tools">
+        <img [src]="toolIconsPath + tool + '.svg'">
+    </li>
 </ul>

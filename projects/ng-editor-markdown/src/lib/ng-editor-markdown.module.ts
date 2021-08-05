@@ -9,7 +9,7 @@ import { MdEditorToolbarComponent } from './md-editor-toolbar/md-editor-toolbar.
 @NgModule({
   declarations: [
     NgEditorMarkdownComponent,
-    MdEditorToolbarComponent
+    MdEditorToolbarComponent,
   ],
   imports: [
     FormsModule,

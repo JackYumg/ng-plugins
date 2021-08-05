@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'md-editor-toolbar',
@@ -7,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MdEditorToolbarComponent implements OnInit {
 
+  @Input()
+  tools: string[] = ['H'];
+  toolIconsPath = './../../assets/svg/editor/b.svg';
   constructor() { }
-
+  
   ngOnInit(): void {
   }
 
