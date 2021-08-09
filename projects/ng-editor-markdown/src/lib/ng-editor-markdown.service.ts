@@ -1,9 +1,16 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+interface ToolBarEvents {
+  type: 'bold'
+}
+@Injectable()
 export class NgEditorMarkdownService {
 
+  toolBarEvent: EventEmitter<ToolBarEvents> = new EventEmitter<ToolBarEvents>();
   constructor() { }
+
+  // 提取字符串
+  getStrs(context: string) {
+    
+  }
 }

@@ -1,5 +1,5 @@
-<ul class="md-editor-list">
-    <li class="md-eidtor-list-item" *ngFor="let tool of tools">
-        <img [src]="toolIconsPath + tool + '.svg'">
+<ul class="md-editor-list" #listElmTpl>
+    <li class="md-editor-list-item" *ngFor="let icon of toolIcons">
+        <button [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent(icon.valueEn)"></button>
     </li>
 </ul>
