@@ -1,3 +1,5 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+
 :host {
     height: 100%;
     width: 100%;
@@ -29,21 +31,63 @@
                 background-size: 576px 72px;
                 border-radius: 3px;
                 background-image: url(./../../assets/svg/editor/icon-editor-toolbar.png);
+
                 &-header {
                     background-position: 3px 3px;
                 }
-                &-bold{
+
+                &-bold {
                     background-position: -21px 3px;
                 }
 
-                &-italtc{
+                &-italtc {
                     background-position: -45px 3px;
                 }
 
-                &:hover{
+                &-code {
+                    background-position: -69px 3px;
+                }
+
+                &-link{
+                    background-position: -118px 3px;
+                }
+                &-blockquote{
+                    background-position: -142px 3px;
+                }
+                &-img{
+                    background-position: -165px 3px;
+                }
+
+                &:hover {
                     background-color: #efefef;
                 }
             }
         }
     }
+}
+
+.example-list {
+    // width: 100px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    background: #fff;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+}
+
+.example-list>li {
+    list-style-type: none;
+    border-bottom: solid 1px #8b8b8b;
+    h2,h3,h4{
+        margin: 6px 0;
+    }
+    &:hover {
+        background: gainsboro;
+        cursor: pointer;
+    }
+}
+
+.example-list>li:last-child {
+    border-bottom: none;
 }

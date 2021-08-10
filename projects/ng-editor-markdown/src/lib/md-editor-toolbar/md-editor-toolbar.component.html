@@ -1,5 +1,17 @@
 <ul class="md-editor-list" #listElmTpl>
     <li class="md-editor-list-item" *ngFor="let icon of toolIcons">
-        <button [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent(icon.valueEn)"></button>
+        <button name="tool" *ngIf="icon.valueEn === 'header'" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+            [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent($event , icon.valueEn)">
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="headOpen">
+                <div name="tool" class="overlay-full">
+                    <ul name="tool" class="example-list">
+                        <li name="tool" (click)="clickEvent($event , 'header' , 2)"><h2>大标题</h2></li>
+                        <li name="tool" (click)="clickEvent($event ,'header' , 3)"><h3>中标题</h3></li>
+                        <li name="tool" (click)="clickEvent($event ,'header' , 4)"><h4>小标题</h4></li>
+                    </ul>
+                </div>
+            </ng-template>
+        </button>
+        <button *ngIf="icon.valueEn !== 'header'" [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent($event , icon.valueEn , -1)"></button>
     </li>
 </ul>

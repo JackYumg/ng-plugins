@@ -1,13 +1,14 @@
 <div class="ng-editor-md" [class.default]="theme === 'default'">
     <div class="ng-editor-md-toolbar">
-        <md-editor-toolbar [tools]="['bold','header', 'italtc']"></md-editor-toolbar>
+        <md-editor-toolbar [tools]="['bold','header', 'italtc' , 'code' , 'link' , 'blockquote','img']">
+        </md-editor-toolbar>
     </div>
 
     <div class="ng-editor-md-workspace">
-        <div class="ng-editor-md-workspace-editor" #editorFrammeTpl contentEditable [class.default]="theme === 'default'"></div>
+        <textarea class="ng-editor-md-workspace-editor" [(ngModel)]="value" #editorFrammeTpl [class.default]="theme === 'default'"></textarea>
         <div class="ng-editor-md-workspace-split-line" [class.default]="theme === 'default'"></div>
         <div class="ng-editor-md-workspace-display" [class.default]="theme === 'default'">
-            <div md-editor-preview></div>
+            <div md-editor-preview [content]="value"></div>
         </div>
     </div>
 </div>

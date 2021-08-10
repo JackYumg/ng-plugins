@@ -5,6 +5,7 @@ import { NgEditorMarkdownComponent } from './ng-editor-markdown.component';
 import { MdEditorToolbarComponent } from './md-editor-toolbar/md-editor-toolbar.component';
 import { MdEditorPreviewComponent } from './md-editor-preview/md-editor-preview.component';
 import { NgEditorMarkdownService } from './ng-editor-markdown.service';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 
 
@@ -17,13 +18,14 @@ import { NgEditorMarkdownService } from './ng-editor-markdown.service';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    OverlayModule
   ],
   exports: [
-    NgEditorMarkdownComponent
+    NgEditorMarkdownComponent,
   ],
   providers: [
-    NgEditorMarkdownService
+    NgEditorMarkdownService,
   ]
 })
 export class NgEditorMarkdownModule { }

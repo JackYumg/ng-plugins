@@ -11,7 +11,11 @@ export interface IconsTypes {
 export const icons: IconsTypes[] = [
     { element: H, value: 0, name: '标题', valueEn: 'header', size: '32' },
     { element: B, value: 0, name: '加粗', valueEn: 'bold', size: '32' },
-    { element: B, value: 0, name: '斜体', valueEn: 'italtc', size: '32' }
+    { element: B, value: 0, name: '斜体', valueEn: 'italtc', size: '32' },
+    { element: B, value: 0, name: '代码块', valueEn: 'code', size: '32' },
+    { element: B, value: 0, name: '链接', valueEn: 'link', size: '32' },
+    { element: B, value: 0, name: 'blockquote', valueEn: 'blockquote', size: '32' },
+    { element: B, value: 0, name: '图片', valueEn: 'img', size: '32' },
 ];
 
 export const toolTypes = icons.map(icon => icon.valueEn);

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { fromEvent } from 'rxjs';
 import { NgEditorMarkdownService } from '../ng-editor-markdown.service';
 import { icons, IconsTypes, typeNameIcons } from './svg.data';
 
@@ -8,15 +9,17 @@ import { icons, IconsTypes, typeNameIcons } from './svg.data';
   styleUrls: ['./md-editor-toolbar.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MdEditorToolbarComponent implements OnInit, OnChanges {
+export class MdEditorToolbarComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   tools: typeNameIcons | undefined;
   toolIconsPath = './../../assets/svg/editor/';
   toolIcons: IconsTypes[] = [];
+  headOpen = false;
   constructor(
-    private render: Renderer2,
-    private ngEditorMarkdownService: NgEditorMarkdownService
+    private ngEditorMarkdownService: NgEditorMarkdownService,
+    private cdk: ChangeDetectorRef,
+    private elm: ElementRef
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.tools.currentValue) {
@@ -36,6 +39,15 @@ export class MdEditorToolbarComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
+    fromEvent(this.elm.nativeElement , 'mousedown').subscribe( ($event:any) => {
+      $event.preventDefault();
+    });
+    fromEvent(window, 'click').subscribe(($event) => {
+      if (($event.target as any).name !== 'tool') {
+        this.headOpen = false;
+        this.cdk.detectChanges();
+      }
+    });
   }
 
   createIcons() {
@@ -44,13 +56,25 @@ export class MdEditorToolbarComponent implements OnInit, OnChanges {
     });
 
     this.toolIcons = myIcons;
-
   }
 
 
-  clickEvent(type: any) {
-    this.ngEditorMarkdownService.toolBarEvent.emit({
-      type
-    });
+  clickEvent(event: MouseEvent , type: any, value?: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    if (type === 'header') {
+      this.headOpen = true;
+      this.ngEditorMarkdownService.toolBarEvent.emit({
+        type
+      });
+    } else {
+      this.ngEditorMarkdownService.toolBarEvent.emit({
+        type
+      });
+    }
+  }
+  ngOnDestroy() {
+
   }
 }
