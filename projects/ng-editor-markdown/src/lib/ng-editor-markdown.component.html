@@ -5,6 +5,11 @@
     </div>
 
     <div class="ng-editor-md-workspace">
+        <div class="ng-editor-md-workspace-linenum" #lineNumElm>
+            <div *ngFor="let i of numberCount" [class.focus]="selectRow === i">
+                {{i}}
+            </div>
+        </div>
         <textarea class="ng-editor-md-workspace-editor" [(ngModel)]="value" #editorFrammeTpl [class.default]="theme === 'default'"></textarea>
         <div class="ng-editor-md-workspace-split-line" [class.default]="theme === 'default'"></div>
         <div class="ng-editor-md-workspace-display" [class.default]="theme === 'default'">

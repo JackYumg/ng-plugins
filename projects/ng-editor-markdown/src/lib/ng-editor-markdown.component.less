@@ -22,9 +22,11 @@
         &-editor {
             padding: 12px;
             border: none;
-            &:hover{
+
+            &:hover {
                 cursor: text;
             }
+
             &:focus-visible {
                 outline: none;
             }
@@ -34,8 +36,40 @@
             }
         }
 
+        &-linenum {
+            width: 32px;
+            border-right: 1px solid gainsboro;
+            padding: 12px 0;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                width: 0 !important
+            }
+
+            div {
+                text-align: right;
+                padding: 0 6px;
+
+                &.focus {
+                    color: #00ad2d;
+                    position: relative;
+
+                    &::after {
+                        content: "";
+                        width: 0;
+                        border: 1px solid gainsboro;
+                        position: absolute;
+                        height: 100%;
+                        right: 0;
+                    }
+                }
+            }
+        }
+
         &-display {
             flex: 1;
+            overflow: auto;
+            padding: 10px;
         }
 
         &-split-line {

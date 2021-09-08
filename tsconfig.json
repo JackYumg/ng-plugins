@@ -16,6 +16,10 @@
         "dist/color-picker/color-picker",
         "dist/color-picker"
       ],
+      "ng-code-editor": [
+        "dist/ng-code-editor/ng-code-editor",
+        "dist/ng-code-editor"
+      ],
       "ng-digital": [
         "dist/ng-digital/ng-digital",
         "dist/ng-digital"

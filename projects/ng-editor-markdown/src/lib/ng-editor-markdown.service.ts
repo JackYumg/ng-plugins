@@ -4,11 +4,15 @@ interface ToolBarEvents {
   type: 'bold' | 'header' | 'italtc',
   value?: any;
 }
-@Injectable()
+@Injectable({
+  providedIn: 'platform'
+})
 export class NgEditorMarkdownService {
 
   toolBarEvent: EventEmitter<ToolBarEvents> = new EventEmitter<ToolBarEvents>();
   keyborderEvent: EventEmitter<any> = new EventEmitter<any>();
+  lineNumEvent: EventEmitter<number> = new EventEmitter<number>();
+  
   constructor() { }
 
   // 提取字符串

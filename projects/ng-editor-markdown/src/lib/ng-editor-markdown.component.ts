@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, Subscription } from 'rxjs';
 import { THEME_MODE } from '../core/datas';
@@ -18,7 +18,7 @@ import { MarkdownHelper } from '../util/helper';
   styleUrls: ['./ng-editor-markdown.component.less', './../core/styles/default.css'],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: NgEditorMarkdownComponent, multi: true }],
 })
-export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
 
   // 选项,只用来初始化编辑器,期间有改变的都不能作为其中的配置
   @Input()
@@ -32,6 +32,7 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValu
   _value: string | undefined;
   set value(value: string | undefined) {
     this._value = value;
+    this.cdk.markForCheck();
   }
 
   get value(): string | undefined {
@@ -74,11 +75,13 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValu
   ngOnInit(): void {
   }
 
+  // 编辑框事件处理
 
   eventBus: { [key: string]: Subscription | null } = {
     focus: null,
     bulr: null,
     keydown: null,
+    keyup: null
   }
 
   // 编辑框
@@ -93,17 +96,38 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValu
       this.eventBus.bulr = fromEvent(this._editorFrammeRef.nativeElement, 'bulr').subscribe((res) => {
         this.isWorking = false;
       });
+
+      this.eventBus.keydown = fromEvent(this._editorFrammeRef.nativeElement, 'keyup').subscribe(() => {
+        this.selectRow = this.markdownHelper.getTextAreaRowNum(this._editorFrammeRef?.nativeElement);
+        this.cdk.detectChanges();
+      });
+
+      this.eventBus.mousedown = fromEvent(this._editorFrammeRef.nativeElement, 'mouseup').subscribe((res) => {
+        this.selectRow = this.markdownHelper.getTextAreaRowNum(this._editorFrammeRef?.nativeElement);
+        this.cdk.detectChanges();
+      });
+
       this.subscribeToolEvent();
     }
   }
 
+  _lineNumElmRef: ElementRef | undefined;
+  @ViewChild('lineNumElm')
+  set lineNumElmRef(elm: ElementRef) {
+    this._lineNumElmRef = elm;
+    this.subscribeLineNumEvent();
+  }
+
+  selectRow = 0;
+
   subscribeToolEvent() {
-    this.ngEditorMarkdownService.toolBarEvent.subscribe(({ type }) => {
+    this.ngEditorMarkdownService.toolBarEvent.subscribe(({ type, value }) => {
       switch (type) {
-        case 'bold':// 点击了加粗
+        case 'bold': // 点击了加粗
           this.addBold();
           break;
         case 'header':
+          this.addHeader(value);
           break;
         case 'italtc':
           this.addItaltc();
@@ -114,41 +138,29 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValu
     });
   }
 
-  addBold() {
-    const text = this.markdownHelper.getSelected(this._editorFrammeRef?.nativeElement);
-    const pis = this.markdownHelper.getTextAreaPos((this._editorFrammeRef?.nativeElement as HTMLTextAreaElement)) || 0;
-    if (!text) { // 没有选中的
-      const boldStr = this.value?.slice(0, pis) + DEFAULT_STR.BOLD + this.value?.slice(pis, this.value.length);
-      this.writeValue(boldStr);
-      this.ngZone.run(() => {
-        setTimeout(() => {
-          this.markdownHelper.textSelect(this._editorFrammeRef?.nativeElement, pis + 2, pis + DEFAULT_STR.BOLD.length - 2);
-        }, 10);
-      });
-    } else if (text === DEFAULT_STR.NOQUTE_BOLD) {
-      if (pis >= 2) {
-        const fullStr = this.value?.slice(pis - 2, pis + DEFAULT_STR.NOQUTE_BOLD.length + 2) || '';
-        if (boldExp.test(fullStr)) {
-          const boldStr = this.value?.slice(0, pis - 2) + DEFAULT_STR.NOQUTE_BOLD + this.value?.slice(pis + DEFAULT_STR.NOQUTE_BOLD.length + 2, this.value.length);
-          this.writeValue(boldStr);
-          this.ngZone.run(() => {
-            setTimeout(() => {
-              this.markdownHelper.textSelect(this._editorFrammeRef?.nativeElement, pis - 2, pis + DEFAULT_STR.NOQUTE_BOLD.length - 2);
-            }, 10);
-          });
-        } else {
-          const boldStr = this.value?.slice(0, pis) + DEFAULT_STR.BOLD + this.value?.slice(pis + text.length, this.value.length);
-          this.writeValue(boldStr);
-          this.ngZone.run(() => {
-            setTimeout(() => {
-              this.markdownHelper.textSelect(this._editorFrammeRef?.nativeElement, pis + 2, pis + 2 + DEFAULT_STR.NOQUTE_BOLD.length);
-            }, 10);
-          });
-        }
-      } else {
-
+  lineCount = 0;
+  numberCount: number[] = [];
+  subscribeLineNumEvent() {
+    this.ngEditorMarkdownService.lineNumEvent.subscribe((num) => {
+      this.numberCount = [];
+      this.lineCount = num;
+      for (let i = 0; i < num; i++) {
+        this.numberCount.push(i + 1);
       }
+      this.cdk.detectChanges();
+    });
+
+    if (this._lineNumElmRef) {
+      this.eventBus.scrool = fromEvent(this._editorFrammeRef?.nativeElement, 'scroll').subscribe((res: any) => {
+        if (this._lineNumElmRef) {
+          this._lineNumElmRef.nativeElement.scrollTop = res.srcElement.scrollTop;
+        }
+      });
     }
+  }
+
+  addBold() {
+   
   }
 
   addItaltc() {
@@ -156,8 +168,11 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, ControlValu
   }
 
 
-  addHeader() {
-
+  addHeader(value: number) {
+    
   }
 
+  ngOnDestroy() {
+
+  }
 }

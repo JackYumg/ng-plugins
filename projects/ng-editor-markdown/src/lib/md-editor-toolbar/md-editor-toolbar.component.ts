@@ -66,7 +66,8 @@ export class MdEditorToolbarComponent implements OnInit, OnChanges, OnDestroy {
     if (type === 'header') {
       this.headOpen = true;
       this.ngEditorMarkdownService.toolBarEvent.emit({
-        type
+        type,
+        value
       });
     } else {
       this.ngEditorMarkdownService.toolBarEvent.emit({
