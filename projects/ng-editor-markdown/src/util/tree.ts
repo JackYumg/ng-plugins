@@ -1,14 +1,17 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode, ImageNode, RefrenceNode } from './vnode';
-
+import { LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode, ImageNode, RefrenceNode, CodeWordNode, TagNode, CodeNode } from './vnode';
+import * as hljs from 'highlightjs';
+import { fromEvent } from 'rxjs';
+import { NgEditorMarkdownService } from './../lib/ng-editor-markdown.service';
 type ReturnType = HTMLElement | Text | HTMLTableElement;
 
 @Injectable()
 export class TokenTree {
     constructor(
-        private renderer2: Renderer2
+        private renderer2: Renderer2,
+        private ngEditorMarkdownService: NgEditorMarkdownService
     ) {
-
+        console.log(hljs);
     }
     // 创建dom树
     // build a dom tree
@@ -53,6 +56,18 @@ export class TokenTree {
                         break;
                     case 'blockquote':
                         rootNode = this.createRefrence(treeNode as RefrenceNode);
+                        break;
+                    case 'pre':
+                        rootNode = this.createCodePre(treeNode as any);
+                        break;
+                    case 'code':
+                        rootNode = this.createCodeWord(treeNode as CodeWordNode);
+                        break;
+                    case 'br':
+                        rootNode = this.createBr();
+                        break;
+                    case 'sub' || 'sup':
+                        rootNode = this.createTag(treeNode as TagNode);
                         break;
                 }
             }
@@ -122,6 +137,54 @@ export class TokenTree {
     createRefrence(refrenceNode: RefrenceNode): any {
         const a: any = this.renderer2.createElement(refrenceNode.type);
         refrenceNode.context && (a.innerText = refrenceNode.context);
+        return a;
+    }
+    createCodeWord(codewordNode: CodeWordNode) {
+        const a: any = this.renderer2.createElement('code');
+        codewordNode.context && (a.innerText = codewordNode.context);
+        return a;
+    }
+
+    createCodePre(codewordNode: CodeWordNode): HTMLElement {
+        const a: any = this.renderer2.createElement('pre');
+        codewordNode.context && (a.innerText = codewordNode.context);
+        const e: string = hljs.highlightAuto(codewordNode.context || '', [codewordNode.lg]).value;
+        a.innerHTML = e;
+
+        // 加入复制代码按钮
+        const span: HTMLSpanElement = this.renderer2.createElement('span');
+        span.innerText = '复制代码';
+        span.title = '复制';
+        span.classList.add('code-copy');
+        a.appendChild(span);
+
+        fromEvent(span, 'mouseup').subscribe((e) => {
+            const input = document.createElement('input');
+            document.body.appendChild(input);
+            input.setAttribute('value', a.innerText);
+            input.select();
+            if (document.execCommand) {
+                document.execCommand('copy');
+                span.innerText = '复制成功';
+                let timers: any = 0;
+                timers = setTimeout(() => {
+                    span.innerText = `复制代码`;
+                }, 3000);
+                this.ngEditorMarkdownService.copyEvent.emit(true);
+            }
+            document.body.removeChild(input);
+        });
+        return a;
+    }
+
+    createBr() {
+        const a: any = this.renderer2.createElement('br');
+        return a;
+    }
+
+    createTag(value: TagNode) {
+        const a: any = this.renderer2.createElement(value.type);
+        a.innerText = value.context;
         return a;
     }
 }

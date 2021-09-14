@@ -41,7 +41,7 @@ export class MdEditorPreviewComponent implements OnInit, OnChanges {
     (this.element.nativeElement as HTMLElement).innerHTML = '';
     const tracks: string[] = this.wordSplit.parse(this.content);
     console.log(tracks);
-    this.ngEditorMarkdownService.lineNumEvent.emit(this.content?.split('\n').length);
+    this.ngEditorMarkdownService.lineNumEvent.emit(this.content?.split('\n'));
     const nodes = this.wordSplit.createVnodes(tracks);
     const domtrees = this.tokenTree.createDomTree(nodes);
     domtrees.forEach((e) => {

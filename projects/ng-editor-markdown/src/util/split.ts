@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { boldExp, codeExp, headersExp, imageExp, italtcExp, netAddressExp, newLineExp, refrenceExp, tableExp } from '../core/datas/rgeexp';
-import { BoldNode, CommitNode, HeaderNode, ItaltcNode, LinkNode, TableNode, TdNode, TrNode, VNode, ImageNode, RefrenceNode, CodeNode } from './vnode';
+import { boldExp, codeExp, headersExp, imageExp, italtcExp, netAddressExp, newLineExp, refrenceExp, tableExp, codeWordExp, tagExp, codeEndExp } from '../core/datas/rgeexp';
+import { BoldNode, CommitNode, HeaderNode, ItaltcNode, LinkNode, TableNode, TdNode, TrNode, VNode, ImageNode, RefrenceNode, CodeNode, CodeWordNode, BrNode, TagNode } from './vnode';
 @Injectable({
     providedIn: 'root'
 })
@@ -18,7 +18,8 @@ export class WordSplit {
     createVnodes(tracks: string[], isNewLine = true): VNode[] {
         const currentNodes: VNode[] = [];
         // 记录需要合并的字符串。比如遇到代码时
-        const recordStrs = [];
+        let recordStrs: any[] = [];
+        let lg = '';
         tracks.map((traskStr = '') => {
             traskStr = isNewLine ? traskStr.trim() : traskStr;
             if (headersExp.test(traskStr) && isNewLine && recordStrs.length <= 0) { // 标题匹配
@@ -38,16 +39,52 @@ export class WordSplit {
                 const e = this.createTable(matheToekns);
                 e.isNewLine = isNewLine;
                 currentNodes.push(e);
+            } else if (codeExp.test(traskStr) || recordStrs.length > 0 || codeEndExp.test(traskStr)) { // 代码块
+                if (codeExp.test(traskStr) && codeEndExp.test(traskStr)) {
+                    const [m1] = traskStr.match(codeExp) || '';
+                    if (m1) {
+                        const [d1, d2] = m1.split((/```/));
+                        if (d2) {
+                            lg = d2;
+                        }
+                    }
+                    const datas = traskStr.split(codeExp).join('\n').split(codeEndExp);
+                    recordStrs = recordStrs.concat(datas);
+                    const node = this.createCode(recordStrs, lg);
+                    recordStrs = [];
+                    currentNodes.push(node);
+                } else if (codeExp.test(traskStr)) {
+                    const [m1] = traskStr.match(codeExp) || '';
+                    if (m1) {
+                        const [d1, d2] = m1.split(/```/);
+                        if (d2) {
+                            lg = d2;
+                        }
+                    }
+                    const datas = traskStr.split(codeExp);
+                    recordStrs = recordStrs.concat(datas);
+                }
+                else if (codeEndExp.test(traskStr)) {
+                    const datas = traskStr.split(codeEndExp);
+                    recordStrs = recordStrs.concat(datas);
+                    const node = this.createCode(recordStrs, lg);
+                    recordStrs = [];
+                    currentNodes.push(node);
+                } else {
+                    recordStrs.push(traskStr);
+                }
+            }
+            else if (new RegExp(tagExp).test(traskStr)) {
+                const e = this.createTagNode(traskStr);
+                e.isNewLine = isNewLine;
+                currentNodes.push(e);
             } else if (refrenceExp.test(traskStr) && recordStrs.length <= 0) { // 引用
                 const matheToekns: string[] = traskStr.split(refrenceExp) || [];
                 const e = this.createRefrence(matheToekns);
                 e.isNewLine = isNewLine;
                 currentNodes.push(e);
-            } else if (codeExp.test(traskStr) || recordStrs.length > 0) { // 代码块
-                const matheToekns: string[] = traskStr.split(codeExp) || [];
-                recordStrs.push('');
-                const e = this.createCode(matheToekns);
-            } else if (boldExp.test(traskStr) && recordStrs.length <= 0) { // 加粗匹配
+            }
+            else if (boldExp.test(traskStr) && recordStrs.length <= 0) { // 加粗匹配
                 const rpxRes = traskStr.match(boldExp);
                 if (rpxRes && rpxRes[0]) {
                     const boldtxt = this.createBold(traskStr);
@@ -65,7 +102,17 @@ export class WordSplit {
                         currentNodes.push(boldtxt);
                     }
                 }
-            } else if (imageExp.test(traskStr) && recordStrs.length <= 0) {
+            } else if (codeWordExp.test(traskStr) && recordStrs.length <= 0) { // 斜体匹配
+                const rpxRes = traskStr.match(codeWordExp);
+                if (rpxRes && rpxRes[0]) {
+                    const boldtxt = this.createCodeWord(traskStr);
+                    if (boldtxt) {
+                        boldtxt.isNewLine = isNewLine;
+                        currentNodes.push(boldtxt);
+                    }
+                }
+            }
+            else if (imageExp.test(traskStr) && recordStrs.length <= 0) {
                 const node = this.createImageNodes(traskStr);
                 node.isNewLine = isNewLine;
                 currentNodes.push(node);
@@ -73,13 +120,36 @@ export class WordSplit {
                 const node = this.createNetAdress(traskStr);
                 node.isNewLine = isNewLine;
                 currentNodes.push(node);
-            } else {
+            } else if (!traskStr.trim()) {
+                const node = this.createNextLine();
+                node.isNewLine = true;
+                currentNodes.push(node);
+            }
+            else {
                 const baseNode = new CommitNode(traskStr);
                 baseNode.isNewLine = isNewLine;
                 currentNodes.push(baseNode);
             }
         });
         return currentNodes;
+    }
+
+    // 创建换行
+    createNextLine() {
+        const brNode = new BrNode();
+        return brNode;
+    }
+
+    // 创建元素
+    createTagNode(strs: string) {
+        const tagNode = new TagNode();
+        const e = strs.split(new RegExp(tagExp, 'g')).filter(e => !!e);
+        console.log(e);
+        // tagNode.context = e;
+        const matched = strs.match(/[\w]+/g);
+        console.log(matched);
+        tagNode.type = (matched || [])[0] as '';
+        return tagNode;
     }
 
     // 创建网址
@@ -223,14 +293,11 @@ export class WordSplit {
         return refrenceNode;
     }
 
-    createCode(matheToekns: string[]) {
-        const codeNode = new CodeNode('code');
-        let tracks:string[] = [];
-        matheToekns.forEach(( str ) => {
-            const tempStrs = str.split('\n');
-            tracks = tracks.concat(tempStrs);
-        });
-        
+    createCode(matheToekns: string[], lg: string) {
+        const codeNode = new CodeNode('pre');
+        codeNode.lg = lg;
+        codeNode.context = matheToekns.join('\n');
+        return codeNode;
     }
 
     // // 创建tr
@@ -355,6 +422,68 @@ export class WordSplit {
                     baseNode.child = baseNode.child.concat(sizer);
                 } else {
                     const tempBoldNode = new ItaltcNode('i');
+                    tempBoldNode.context = context;
+                    baseNode.child.push(tempBoldNode);
+                }
+            } else {
+                isFull = false;
+                const tempNode = this.createVnodes([e], false);
+                baseNode.child = baseNode.child.concat(tempNode);
+            }
+        });
+        if (isFull) {
+            baseNode.type = 'i';
+        }
+        return baseNode;
+    }
+
+    createCodeWord(strs: string = ''): VNode {
+        const baseNode = new VNode();
+        let matched: string[] = strs.match(codeWordExp) || [];
+        matched = matched.sort((a, b) => a.length - b.length);
+        const keyMap: any = {
+
+        };
+
+        matched.map((e, index) => {
+            keyMap['wym_' + index + '_wym'] = e;
+        });
+
+        matched.map((e, index) => {
+            strs = strs.replace(e, 'wym_' + index + '_wym');
+        });
+
+        const str: string[] = [];
+        matched.map((e, index) => {
+            str.push('wym_' + index + '_wym');
+        });
+        const rxp = new RegExp(str.join('|'));
+        const rxpg = new RegExp(str.join('|'), 'g');
+
+        const a1: string[] = strs.split(rxp);
+        const a2: string[] = strs.match(rxpg) as string[];
+        const resList: string[] = [];
+        let i = 0;
+        let j = 0;
+        while (i <= (a1.length - 1) || j <= (a2.length - 1)) {
+            if (a1[i] || a1[i] === '') {
+                resList.push(a1[i]);
+                i++;
+            }
+            if (a2[j] || a2[j] === '') {
+                resList.push(a2[j]);
+                j++;
+            }
+        }
+        let isFull = true;
+        resList.forEach((e, index) => {
+            if (keyMap[e]) {
+                const context = keyMap[e].split(/`{1}|\`{1}$/).join('');
+                const sizer = this.createVnodes([context], false);
+                if (sizer.length > 0 && sizer[0].isRoot) {
+                    baseNode.child = baseNode.child.concat(sizer);
+                } else {
+                    const tempBoldNode = new CodeWordNode('code');
                     tempBoldNode.context = context;
                     baseNode.child.push(tempBoldNode);
                 }

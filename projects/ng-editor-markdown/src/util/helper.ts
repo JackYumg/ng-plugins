@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StringfiyService } from './stringfiy.service';
 
 type IESection = {
     createRange: () => any;
@@ -14,8 +15,13 @@ const doc: Documents | Document = document;
     providedIn: 'root'
 })
 export class MarkdownHelper {
+    constructor(
+        private stringfiyService: StringfiyService
+    ) {
+
+    }
     // 字符位置
-    getTextAreaPos (el: HTMLTextAreaElement) {
+    getTextAreaPos(el: HTMLTextAreaElement) {
         let range, textRange, duplicate;
         el.focus();
         if (el.selectionStart) {
@@ -29,6 +35,18 @@ export class MarkdownHelper {
             duplicate.setEndPoint('EndToStart', textRange);
             return duplicate.text.length;
         }
+    }
+
+    getTextLinenum(str: string, el: HTMLElement) {
+        const ed = str.split('\n');
+        const fontSize = this.getFontSize(el);
+        let lineNum = 0;
+        for (const e of ed) {
+            if (e && e.trim()) {
+                lineNum += this.stringfiyService.countChartLength(e, el.clientWidth, Number(fontSize));
+            }
+        }
+        return ed.length + lineNum;
     }
 
     getTextAreaRowNum(el: HTMLTextAreaElement) {
@@ -46,8 +64,15 @@ export class MarkdownHelper {
             duplicate.setEndPoint('EndToStart', textRange);
             index = duplicate.text.length;
         }
-        const ed = el.value.substring(0 , index).split('\n');
-        return ed.length;
+        const ed = el.value.substring(0, index).split('\n');
+        const fontSize = this.getFontSize(el);
+        let lineNum = 0;
+        for (const e of ed) {
+            if (e && e.trim()) {
+                lineNum += this.stringfiyService.countChartLength(e, el.clientWidth, Number(fontSize));
+            }
+        }
+        return ed.length + lineNum;
     }
 
     textSelect(textarea: any, start: number, end: number) {
@@ -68,7 +93,16 @@ export class MarkdownHelper {
         } else if ((document as any).selection) {
             return (document as any).selection.createRange().text;
         }
+    }
 
+    getFontSize(el: HTMLElement): string {
+        if (el.style.fontSize) {
+            return el.style.fontSize;
+        } else if (el.parentElement) {
+            return this.getFontSize(el.parentElement);
+        } else {
+            return '16';
+        }
     }
 }
 

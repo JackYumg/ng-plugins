@@ -1,4 +1,4 @@
-type VNodeType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'a' | 'list' | 'code' | 'table' | 'imgage' | 'div' | 'tr' | 'td' | 'th' | 'commit' | 'root' | 'i' | 'b' | 'blockquote' | '';
+type VNodeType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'a' | 'list' | 'code' | 'table' | 'imgage' | 'div' | 'tr' | 'td' | 'th' | 'commit' | 'root' | 'i' | 'b' | 'pre' | 'blockquote' | 'br' | 'sub' | 'sup' | '';
 // 基础节点
 export class VNode {
     type: VNodeType = '';
@@ -15,6 +15,18 @@ export class VNode {
 
     get isRoot(): boolean {
         return this.type === 'root';
+    }
+}
+
+export class BrNode extends VNode {
+    constructor() {
+        super('br');
+    }
+}
+
+export class TagNode extends VNode  {
+    constructor() {
+        super('');
     }
 }
 
@@ -60,6 +72,12 @@ export class ItaltcNode extends VNode {
         super(type)
     }
 }
+export class CodeWordNode extends VNode {
+    lg = 'js';
+    constructor(type: VNodeType) {
+        super(type)
+    }
+}
 
 export class Blockquote extends VNode {
     constructor(type: VNodeType) {
@@ -95,6 +113,7 @@ export class TdNode extends VNode {
 }
 
 export class CodeNode extends VNode {
+    lg = 'js';
     constructor(type: VNodeType = 'code') {
         super(type);
     }

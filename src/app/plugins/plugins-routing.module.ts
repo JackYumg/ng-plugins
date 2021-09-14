@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PluginsComponent } from './plugins/plugins.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'appear', pathMatch: 'full' },
-  { path: 'appear', loadChildren: () => import('./appear/appear.module').then(m => m.AppearModule) }
+  { path: '', redirectTo: 'index', pathMatch: 'full' },
+  {
+    path: 'index', component: PluginsComponent, children: [
+      { path: 'appear', loadChildren: () => import('./appear/appear.module').then(m => m.AppearModule) }
+    ]
+  }
 ];
 
 @NgModule({

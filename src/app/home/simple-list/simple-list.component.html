@@ -1,0 +1,34 @@
+<div nz-row nzGutter="16">
+  <div nz-col [nzSpan]="4" *ngFor="let item of plugins">
+    <nz-card
+      [nzCover]="coverTemplate"
+      [nzActions]="[actionSetting, actionEdit, actionEllipsis]"
+    >
+      <nz-card-meta
+        [nzTitle]="item.title"
+        [nzDescription]="item.desc"
+        [nzAvatar]="avatarTemplate"
+      ></nz-card-meta>
+    </nz-card>
+    <ng-template #avatarTemplate>
+      <nz-avatar
+        [nzSrc]="item.ava"
+      ></nz-avatar>
+    </ng-template>
+    <ng-template #coverTemplate>
+      <img
+        alt="example"
+        [src]="item.image"
+      />
+    </ng-template>
+    <ng-template #actionSetting>
+        <i nz-icon nzType="github" title="源代码" nzTheme="outline"></i>
+    </ng-template>
+    <ng-template #actionEdit>
+        <i nz-icon nzType="eye" title="查看示例" nzTheme="outline"></i>
+    </ng-template>
+    <ng-template #actionEllipsis>
+      <i nz-icon nzType="ellipsis"></i>
+    </ng-template>
+  </div>
+</div>

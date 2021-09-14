@@ -11,8 +11,8 @@ export class NgEditorMarkdownService {
 
   toolBarEvent: EventEmitter<ToolBarEvents> = new EventEmitter<ToolBarEvents>();
   keyborderEvent: EventEmitter<any> = new EventEmitter<any>();
-  lineNumEvent: EventEmitter<number> = new EventEmitter<number>();
-  
+  lineNumEvent: EventEmitter<string[]> = new EventEmitter<string[]>();
+  copyEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor() { }
 
   // 提取字符串
@@ -25,6 +25,6 @@ export class NgEditorMarkdownService {
   }
 
   renderP(context: string) {
-    
+
   }
 }

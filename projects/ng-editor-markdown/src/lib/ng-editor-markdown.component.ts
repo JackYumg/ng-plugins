@@ -3,10 +3,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, Subscription } from 'rxjs';
 import { THEME_MODE } from '../core/datas';
 import { NgEditorMarkdownService } from './ng-editor-markdown.service';
-import { throttleTime } from 'rxjs/operators';
-import { boldExp, charExp, italtcExp } from '../core/datas/rgeexp';
-import { DEFAULT_STR } from '../core/datas/static.daa';
 import { MarkdownHelper } from '../util/helper';
+import { StringfiyService } from '../util/stringfiy.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -18,7 +16,7 @@ import { MarkdownHelper } from '../util/helper';
   styleUrls: ['./ng-editor-markdown.component.less', './../core/styles/default.css'],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: NgEditorMarkdownComponent, multi: true }],
 })
-export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class NgEditorMarkdownComponent implements OnChanges, OnDestroy, ControlValueAccessor {
 
   // 选项,只用来初始化编辑器,期间有改变的都不能作为其中的配置
   @Input()
@@ -42,9 +40,8 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
   constructor(
     private cdk: ChangeDetectorRef,
     private ngEditorMarkdownService: NgEditorMarkdownService,
-    private render: Renderer2,
     private markdownHelper: MarkdownHelper,
-    private ngZone: NgZone
+    private stringfiyService: StringfiyService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,9 +67,6 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
   }
   setDisabledState?(isDisabled: boolean): void {
     this.cdk.markForCheck();
-  }
-
-  ngOnInit(): void {
   }
 
   // 编辑框事件处理
@@ -122,18 +116,20 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
 
   subscribeToolEvent() {
     this.ngEditorMarkdownService.toolBarEvent.subscribe(({ type, value }) => {
-      switch (type) {
-        case 'bold': // 点击了加粗
-          this.addBold();
-          break;
-        case 'header':
-          this.addHeader(value);
-          break;
-        case 'italtc':
-          this.addItaltc();
-          break;
-        default:
-          break;
+      if (value) {
+        switch (type) {
+          case 'bold': // 点击了加粗
+            this.addBold();
+            break;
+          case 'header':
+            this.addHeader(value);
+            break;
+          case 'italtc':
+            this.addItaltc();
+            break;
+          default:
+            break;
+        }
       }
     });
   }
@@ -141,9 +137,14 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
   lineCount = 0;
   numberCount: number[] = [];
   subscribeLineNumEvent() {
-    this.ngEditorMarkdownService.lineNumEvent.subscribe((num) => {
+    this.ngEditorMarkdownService.lineNumEvent.subscribe((splitLines: string[]) => {
+      const textarea: HTMLTextAreaElement = this._editorFrammeRef?.nativeElement;
+      let num = 0;
       this.numberCount = [];
-      this.lineCount = num;
+      for (let i = 0; i < splitLines.length; i++) {
+        const count = this.markdownHelper.getTextLinenum(splitLines[i], textarea);
+        num += count;
+      }
       for (let i = 0; i < num; i++) {
         this.numberCount.push(i + 1);
       }
@@ -160,7 +161,7 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   addBold() {
-   
+
   }
 
   addItaltc() {
@@ -169,7 +170,29 @@ export class NgEditorMarkdownComponent implements OnInit, OnChanges, OnDestroy, 
 
 
   addHeader(value: number) {
-    
+    const selected = this.markdownHelper.getSelected(this._editorFrammeRef?.nativeElement);
+    const pos = this.markdownHelper.getTextAreaPos(this._editorFrammeRef?.nativeElement);
+    const splited = this.value?.split('\n') || [];
+    let lineCount = 0;
+    let beforeStr: string = '';
+    for (const str of splited) {
+      if (lineCount < pos) {
+        lineCount += str.length;
+        beforeStr = str;
+      } else {
+        break;
+      }
+    }
+    console.log(selected, pos, beforeStr);
+    if (!selected) {
+      const e = splited.findIndex(e => e === beforeStr);
+      const appendstr = '#'.repeat(value) + ' 大标题';
+      console.log(appendstr);
+      splited[e + 1] = appendstr;
+    } else {
+
+    }
+    this.value = splited.join('\n');
   }
 
   ngOnDestroy() {

@@ -5,17 +5,20 @@
 
     .table {
         border: @per-unut solid gainsboro;
+        padding: @per-unut * 10 0;
+        width: 100%;
 
         th {
-            padding: @per-unut * 5;
+            padding: @per-unut * 10;
             border: @per-unut solid gainsboro;
+            background: #eaeaea;
         }
 
         tr {}
 
         td {
             border: @per-unut solid gainsboro;
-            padding: @per-unut * 5;
+            padding: @per-unut * 10;
         }
 
 
@@ -23,14 +26,78 @@
 
     h1 {
         font-size: @per-unut * 20;
+        border-bottom: 1px solid gainsboro;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
     }
 
     h2 {
         font-size: @per-unut * 18;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
+    }
+
+    h3 {
+        font-size: @per-unut * 16;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
+    }
+
+    h4 {
+        font-size: @per-unut * 14;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
+    }
+
+    h5 {
+        font-size: @per-unut * 12;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
+    }
+
+    h6 {
+        font-size: @per-unut * 10;
+        padding: @per-unut * 10 0 @per-unut * 10 0;
+        margin: 0;
+    }
+
+    code {
+        font-size: @per-unut * 8.7;
+        color: #e83e8c;
+        word-wrap: break-word;
+    }
+
+    pre {
+        background: #3c3c3c;
+        color: #a9b7c6;
+        position: relative;
+        overflow: hidden;
+        padding: 1em;
+
+        &::before {
+            background: url('./../assets/img/pre.png') no-repeat;
+            background-size: contain;
+            width: 3em;
+            content: " ";
+            position: absolute;
+            left: 0.6em;
+            top: 0.4em;
+        }
+
+        &:hover {
+            .code-copy {
+                visibility: visible;
+            }
+        }
     }
 
     blockquote {
-        padding-left: 1rem;
+        margin: @per-unut * 10 0 @per-unut * 10 0;
+        padding-left: @per-unut * 10;
         border-left: .25rem solid #e9ecef;
+    }
+
+    br {
+        font-size: @per-unut;
     }
 }
