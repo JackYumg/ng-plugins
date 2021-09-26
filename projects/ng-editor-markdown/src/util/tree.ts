@@ -1,5 +1,5 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode, ImageNode, RefrenceNode, CodeWordNode, TagNode, CodeNode } from './vnode';
+import { LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode, ImageNode, RefrenceNode, CodeWordNode, TagNode, UListNode, OListNode, LiNode } from './vnode';
 import * as hljs from 'highlightjs';
 import { fromEvent } from 'rxjs';
 import { NgEditorMarkdownService } from './../lib/ng-editor-markdown.service';
@@ -11,7 +11,6 @@ export class TokenTree {
         private renderer2: Renderer2,
         private ngEditorMarkdownService: NgEditorMarkdownService
     ) {
-        console.log(hljs);
     }
     // 创建dom树
     // build a dom tree
@@ -19,7 +18,7 @@ export class TokenTree {
         const nodes: ReturnType[] = [];
         treeNodes.map((treeNode: VNode) => {
             let rootNode: HTMLElement | Text | undefined;
-            if (!treeNode.isRoot) {
+            if (treeNode && !treeNode.isRoot) {
                 switch (treeNode.type) {
                     case 'h1':
                     case 'h2':
@@ -69,6 +68,13 @@ export class TokenTree {
                     case 'sub' || 'sup':
                         rootNode = this.createTag(treeNode as TagNode);
                         break;
+                    case 'ul':
+                    case 'ol':
+                        rootNode = this.createList(treeNode as UListNode | OListNode);
+                        break;
+                    case 'li':
+                        rootNode = this.createLi(treeNode as LiNode);
+                        break;
                 }
             }
             if (!rootNode) {
@@ -87,8 +93,15 @@ export class TokenTree {
         return nodes;
     }
     createCommit(commitNode: VNode): Text {
-        const e = document.createTextNode(commitNode.context || '');
-        return e;
+        if (commitNode.isNewLine) {
+            const e = this.renderer2.createElement('p');
+            const c = document.createTextNode(`${commitNode.context || ''}`);
+            e.appendChild(c);
+            return e;
+        } else {
+            const e = document.createTextNode(`${commitNode.context || ''}`);
+            return e;
+        }
     }
     createHeader(headerNode: VNode & HeaderNode): HTMLElement {
         const e: HTMLHeadElement = this.renderer2.createElement(headerNode.type);
@@ -136,18 +149,25 @@ export class TokenTree {
 
     createRefrence(refrenceNode: RefrenceNode): any {
         const a: any = this.renderer2.createElement(refrenceNode.type);
-        refrenceNode.context && (a.innerText = refrenceNode.context);
+        if (refrenceNode.context) {
+            a.innerText = refrenceNode.context;
+        }
         return a;
     }
-    createCodeWord(codewordNode: CodeWordNode) {
+
+    createCodeWord(codewordNode: CodeWordNode): HTMLElement {
         const a: any = this.renderer2.createElement('code');
-        codewordNode.context && (a.innerText = codewordNode.context);
+        if (codewordNode.context) {
+            a.innerText = codewordNode.context;
+        }
         return a;
     }
 
     createCodePre(codewordNode: CodeWordNode): HTMLElement {
         const a: any = this.renderer2.createElement('pre');
-        codewordNode.context && (a.innerText = codewordNode.context);
+        if (codewordNode.context) {
+            a.innerText = codewordNode.context;
+        }
         const e: string = hljs.highlightAuto(codewordNode.context || '', [codewordNode.lg]).value;
         a.innerHTML = e;
 
@@ -158,10 +178,10 @@ export class TokenTree {
         span.classList.add('code-copy');
         a.appendChild(span);
 
-        fromEvent(span, 'mouseup').subscribe((e) => {
+        fromEvent(span, 'mouseup').subscribe(() => {
             const input = document.createElement('input');
             document.body.appendChild(input);
-            input.setAttribute('value', a.innerText);
+            input.setAttribute('value', a.innerText.replace(/(复制成功)|(复制代码)$/, ''));
             input.select();
             if (document.execCommand) {
                 document.execCommand('copy');
@@ -177,14 +197,24 @@ export class TokenTree {
         return a;
     }
 
-    createBr() {
+    createBr(): HTMLElement {
         const a: any = this.renderer2.createElement('br');
         return a;
     }
 
-    createTag(value: TagNode) {
+    createTag(value: TagNode): HTMLElement {
         const a: any = this.renderer2.createElement(value.type);
         a.innerText = value.context;
+        return a;
+    }
+
+    createLi(value: LiNode): HTMLElement {
+        const a: any = this.renderer2.createElement(value.type);
+        return a;
+    }
+
+    createList(value: UListNode | OListNode): HTMLElement {
+        const a: any = this.renderer2.createElement(value.type);
         return a;
     }
 }

@@ -2,7 +2,12 @@
 
 .ng-editor-md-workspace-display {
     font-size: 16px;
+    margin: 0;
+    * {
+        margin: 1em 0;
+    }
 
+    table,
     .table {
         border: @per-unut solid gainsboro;
         padding: @per-unut * 10 0;
@@ -21,7 +26,6 @@
             padding: @per-unut * 10;
         }
 
-
     }
 
     h1 {
@@ -29,36 +33,42 @@
         border-bottom: 1px solid gainsboro;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     h2 {
         font-size: @per-unut * 18;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     h3 {
         font-size: @per-unut * 16;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     h4 {
         font-size: @per-unut * 14;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     h5 {
         font-size: @per-unut * 12;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     h6 {
         font-size: @per-unut * 10;
         padding: @per-unut * 10 0 @per-unut * 10 0;
         margin: 0;
+        font-weight: 700;
     }
 
     code {
@@ -73,9 +83,10 @@
         position: relative;
         overflow: hidden;
         padding: 1em;
+        margin: 0;
 
         &::before {
-            background: url('./../assets/img/pre.png') no-repeat;
+            background: url(~'./../assets/img/pre.png') no-repeat;
             background-size: contain;
             width: 3em;
             content: " ";
@@ -86,18 +97,32 @@
 
         &:hover {
             .code-copy {
-                visibility: visible;
+                display: inline-block;
             }
         }
     }
 
     blockquote {
-        margin: @per-unut * 10 0 @per-unut * 10 0;
-        padding-left: @per-unut * 10;
-        border-left: .25rem solid #e9ecef;
+        margin: 20px 0;
+        padding: .5em 1.2em;
+        line-height: 2em;
+        background-color: #ececec;
+        border-left: 5px solid #35b378;
+        display: block;
     }
 
     br {
         font-size: @per-unut;
+    }
+
+    dl,
+    ol,
+    ul {
+        margin-top: 0;
+        margin-bottom: 1rem;
+
+        li {
+            margin: 0;
+        }
     }
 }

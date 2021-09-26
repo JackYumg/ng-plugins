@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ng-plugins",
+            "outputPath": "dist/ng-plugins/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -116,7 +116,8 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "e2e/tsconfig.json",
+              "tsconfig.server.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -133,6 +134,53 @@
             "production": {
               "devServerTarget": "ng-plugins:serve:production"
             }
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ng-plugins/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": true
+            }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "ng-plugins:build",
+            "serverTarget": "ng-plugins:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ng-plugins:build:production",
+              "serverTarget": "ng-plugins:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "ng-plugins:build:production",
+            "serverTarget": "ng-plugins:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
@@ -249,6 +297,46 @@
             "tsConfig": [
               "projects/ng-editor-markdown/tsconfig.lib.json",
               "projects/ng-editor-markdown/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ng-marked-preview": {
+      "projectType": "library",
+      "root": "projects/ng-marked-preview",
+      "sourceRoot": "projects/ng-marked-preview/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ng-marked-preview/tsconfig.lib.json",
+            "project": "projects/ng-marked-preview/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ng-marked-preview/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-marked-preview/src/test.ts",
+            "tsConfig": "projects/ng-marked-preview/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-marked-preview/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-marked-preview/tsconfig.lib.json",
+              "projects/ng-marked-preview/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

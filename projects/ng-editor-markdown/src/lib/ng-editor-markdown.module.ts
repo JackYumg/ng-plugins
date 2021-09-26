@@ -23,6 +23,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
   ],
   exports: [
     NgEditorMarkdownComponent,
+    MdEditorPreviewComponent
   ],
   providers: [
     NgEditorMarkdownService,

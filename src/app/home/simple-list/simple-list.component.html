@@ -1,34 +1,26 @@
 <div nz-row nzGutter="16">
-  <div nz-col [nzSpan]="4" *ngFor="let item of plugins">
-    <nz-card
-      [nzCover]="coverTemplate"
-      [nzActions]="[actionSetting, actionEdit, actionEllipsis]"
-    >
-      <nz-card-meta
-        [nzTitle]="item.title"
-        [nzDescription]="item.desc"
-        [nzAvatar]="avatarTemplate"
-      ></nz-card-meta>
+  <div nz-col [nzSpan]="4" [nzSm]="12" [nzXs]="24" [nzXl]="8" [nzXXl]="6" *ngFor="let item of plugins" class="card">
+    <nz-card [nzCover]="coverTemplate" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+      <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc" [nzAvatar]="avatarTemplate"></nz-card-meta>
     </nz-card>
     <ng-template #avatarTemplate>
-      <nz-avatar
-        [nzSrc]="item.ava"
-      ></nz-avatar>
+      <nz-avatar [nzSrc]="item.ava"></nz-avatar>
     </ng-template>
     <ng-template #coverTemplate>
-      <img
-        alt="example"
-        [src]="item.image"
-      />
+      <img alt="example" [src]="item.image" class="demo-img" />
     </ng-template>
     <ng-template #actionSetting>
+      <a [href]="item.github" target="__target">
         <i nz-icon nzType="github" title="源代码" nzTheme="outline"></i>
+      </a>
     </ng-template>
     <ng-template #actionEdit>
-        <i nz-icon nzType="eye" title="查看示例" nzTheme="outline"></i>
+      <i nz-icon nzType="eye" (click)="gotoPreview(item)" title="查看示例" nzTheme="outline"></i>
     </ng-template>
     <ng-template #actionEllipsis>
-      <i nz-icon nzType="ellipsis"></i>
+      <a [href]="item.npm" target="__target">
+        <i nz-icon [nzIconfont]="'icon-npm'" title="发布地址"></i>
+      </a>
     </ng-template>
   </div>
 </div>

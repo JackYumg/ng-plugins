@@ -1,3 +1,5 @@
+
+<h1>代码展示</h1>
 <section class="code-box">
   <section class="code-box-demo">
     <ng-content></ng-content>
@@ -25,4 +27,8 @@
         [nzEditorOption]="{ language: checkItem.lang}" [disabled]="true"></nz-code-editor>
     </div>
   </section>
+</section>
+
+<section class="markdown">
+  <div md-editor-preview [content]="doc" class="ng-editor-md-workspace-display"></div>
 </section>

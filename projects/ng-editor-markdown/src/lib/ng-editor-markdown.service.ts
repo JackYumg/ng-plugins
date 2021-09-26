@@ -1,12 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
 interface ToolBarEvents {
-  type: 'bold' | 'header' | 'italtc',
+  type: 'bold' | 'header' | 'italtc';
   value?: any;
 }
-@Injectable({
-  providedIn: 'platform'
-})
+@Injectable()
 export class NgEditorMarkdownService {
 
   toolBarEvent: EventEmitter<ToolBarEvents> = new EventEmitter<ToolBarEvents>();

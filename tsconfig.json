@@ -27,6 +27,10 @@
       "ng-editor-markdown": [
         "dist/ng-editor-markdown/ng-editor-markdown",
         "dist/ng-editor-markdown"
+      ],
+      "ng-marked-preview": [
+        "dist/ng-marked-preview/ng-marked-preview",
+        "dist/ng-marked-preview"
       ]
     },
     "experimentalDecorators": true,

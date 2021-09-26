@@ -1,18 +1,8 @@
 <ul class="md-editor-list" #listElmTpl>
-  <li class="md-editor-list-item" *ngFor="let icon of toolIcons">
-    <button
-      name="tool"
-      *ngIf="icon.valueEn === 'header'"
-      cdkOverlayOrigin
-      #trigger="cdkOverlayOrigin"
-      [class]="['icon', 'icon-' + icon.valueEn]"
-      (click)="clickEvent($event, icon.valueEn)"
-    >
-      <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="headOpen"
-      >
+  <li class="md-editor-list-item" [title]="icon.name" *ngFor="let icon of toolIcons">
+    <button name="tool" *ngIf="icon.valueEn === 'header'" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+      [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent($event, icon.valueEn)">
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="headOpen">
         <div name="tool" class="overlay-full">
           <ul name="tool" class="example-list">
             <li name="tool" (click)="clickEvent($event, 'header', 1)">
@@ -37,10 +27,17 @@
         </div>
       </ng-template>
     </button>
-    <button
-      *ngIf="icon.valueEn !== 'header'"
-      [class]="['icon', 'icon-' + icon.valueEn]"
-      (click)="clickEvent($event, icon.valueEn, -1)"
-    ></button>
+    <button *ngIf="icon.valueEn !== 'header'" [class]="['icon', 'icon-' + icon.valueEn]"
+      (click)="clickEvent($event, icon.valueEn, -1)"></button>
   </li>
+</ul>
+
+<ul class="md-editor-list">
+  <ng-container *ngFor="let icon of extraIcons">
+    <li class="md-editor-list-item extra">
+      <button name="tool" [class]="['icon', 'icon-' + icon.valueEn]" (click)="clickEvent($event, icon.valueEn)">
+      </button>
+    </li>
+  </ng-container>
+
 </ul>

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NzCodeEditorComponent } from 'ng-zorro-antd/code-editor';
 import { NzTabChangeEvent } from 'ng-zorro-antd/tabs';
+import { HttpService } from '../../service/http.service';
 import { FileItem } from './sand-box-meta';
-
 @Component({
   selector: 'app-sand-box',
   templateUrl: './sand-box.component.html',
@@ -21,19 +21,30 @@ export class SandBoxComponent implements OnInit {
   pluginDesc = '';
   @Input()
   pluginDescDetail = '';
-  constructor() { }
+  @Input()
+  docUrl = 'assets/doc/test.md';
+
+  doc!: string;
+  constructor(
+    private httpService: HttpService,
+    private cdk: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.checkItem = this.fileList[0];
+    this.httpService.getText(this.docUrl).subscribe((res) => {
+      this.doc = res;
+      this.cdk.detectChanges();
+    });
   }
 
-  tabIndexChange($event: NzTabChangeEvent) {
+  tabIndexChange($event: NzTabChangeEvent): void {
     const index: any = $event.index;
     this.checkItem = this.fileList[index];
     this.codeEditorRef.layout();
   }
 
-  expand() {
+  expand(): void {
     this.codeExpand = !this.codeExpand;
     this.codeEditorRef.layout();
   }

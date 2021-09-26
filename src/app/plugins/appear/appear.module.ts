@@ -9,7 +9,8 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ColorPickerModule } from 'projects/color-picker/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from './markdown/markdown.component';
-import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-api';
+import { NgMarkedPreviewComponent } from './ng-marked-preview/ng-marked-preview.component';
+import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-a
     DigitalComponent,
     ColorPickerComponent,
     MarkdownComponent,
+    NgMarkedPreviewComponent,
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,7 @@ import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-a
     NgDigitalModule,
     SharedModule,
     ColorPickerModule,
-    NgEditorMarkdownModule,
+    NgMarkedPreviewModule.forRoot({}),
     FormsModule,
     ReactiveFormsModule
   ]

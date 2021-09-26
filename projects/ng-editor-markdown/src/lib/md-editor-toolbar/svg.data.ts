@@ -3,7 +3,7 @@ export const B = `<path d="M497.022373 1023.70431a358.982586 358.982586 0 0 0 24
 export interface IconsTypes {
     element: string;
     name: string;
-    value?: number
+    value?: number;
     size: string;
     valueEn: string;
 }
@@ -16,6 +16,15 @@ export const icons: IconsTypes[] = [
     { element: B, value: 0, name: '链接', valueEn: 'link', size: '32' },
     { element: B, value: 0, name: 'blockquote', valueEn: 'blockquote', size: '32' },
     { element: B, value: 0, name: '图片', valueEn: 'img', size: '32' },
+    { element: B, value: 0, name: '无序列表', valueEn: 'ul', size: '32' },
+    { element: B, value: 0, name: '有序列表', valueEn: 'ol', size: '32' },
+    { element: B, value: 0, name: '表格', valueEn: 'table', size: '32' }
+];
+
+export const extraIcons: IconsTypes[] = [
+    { element: H, value: 0, name: '全屏', valueEn: 'fullScr', size: '32' },
+    { element: H, value: 1, name: '预览', valueEn: 'preview', size: '32' },
+    { element: H, value: 1, name: '预览禁用', valueEn: 'preview-disable', size: '32' },
 ];
 
 export const toolTypes = icons.map(icon => icon.valueEn);

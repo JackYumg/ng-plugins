@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { boldExp, codeExp, headersExp, imageExp, italtcExp, netAddressExp, newLineExp, refrenceExp, tableExp, codeWordExp, tagExp, codeEndExp } from '../core/datas/rgeexp';
-import { BoldNode, CommitNode, HeaderNode, ItaltcNode, LinkNode, TableNode, TdNode, TrNode, VNode, ImageNode, RefrenceNode, CodeNode, CodeWordNode, BrNode, TagNode } from './vnode';
+import { boldExp, codeExp, headersExp, imageExp, italtcExp, netAddressExp, newLineExp, refrenceExp, tableExp, codeWordExp, tagExp, codeEndExp, ulistExp, olistExp } from '../core/datas/rgeexp';
+import { BoldNode, CommitNode, HeaderNode, ItaltcNode, LinkNode, TableNode, TdNode, TrNode, VNode, ImageNode, RefrenceNode, CodeNode, CodeWordNode, BrNode, TagNode, UListNode, OListNode, LiNode } from './vnode';
 @Injectable({
     providedIn: 'root'
 })
@@ -21,13 +21,37 @@ export class WordSplit {
         let recordStrs: any[] = [];
         let lg = '';
         tracks.map((traskStr = '') => {
-            traskStr = isNewLine ? traskStr.trim() : traskStr;
+            if (isNewLine && !(ulistExp.test(traskStr) || olistExp.test(traskStr))) {
+                traskStr = traskStr.trim();
+            }
             if (headersExp.test(traskStr) && isNewLine && recordStrs.length <= 0) { // 标题匹配
                 const rpxRes = traskStr.match(headersExp);
                 if (rpxRes && rpxRes[0]) {
                     const level = rpxRes[0].trim().length;
                     const [context] = traskStr.split(headersExp).filter(e => !!e);
                     const header = this.createHeader(context, level);
+                    if (header) {
+                        header.isNewLine = isNewLine;
+                        currentNodes.push(header);
+                    }
+                }
+            } else if (ulistExp.test(traskStr) && isNewLine && recordStrs.length <= 0) { // 列表匹配
+                const rpxRes = traskStr.match(ulistExp);
+                if (rpxRes && rpxRes[0]) {
+                    const level = rpxRes[0].length;
+                    const context = traskStr.split('\n').filter(e => !!e);
+                    const header = this.createUList(context.map(str => str.split(ulistExp).join('')), level);
+                    if (header) {
+                        header.isNewLine = isNewLine;
+                        currentNodes.push(header);
+                    }
+                }
+            } else if (olistExp.test(traskStr) && isNewLine && recordStrs.length <= 0) { // 列表匹配
+                const rpxRes = traskStr.match(olistExp);
+                if (rpxRes && rpxRes[0]) {
+                    const level = rpxRes[0].length;
+                    const context = traskStr.split('\n').filter(e => !!e);
+                    const header = this.createOList(context.map(str => str.split(olistExp).join('')), level);
                     if (header) {
                         header.isNewLine = isNewLine;
                         currentNodes.push(header);
@@ -121,9 +145,9 @@ export class WordSplit {
                 node.isNewLine = isNewLine;
                 currentNodes.push(node);
             } else if (!traskStr.trim()) {
-                const node = this.createNextLine();
-                node.isNewLine = true;
-                currentNodes.push(node);
+                // const node = this.createNextLine();
+                // node.isNewLine = true;
+                // currentNodes.push(node);
             }
             else {
                 const baseNode = new CommitNode(traskStr);
@@ -144,10 +168,8 @@ export class WordSplit {
     createTagNode(strs: string) {
         const tagNode = new TagNode();
         const e = strs.split(new RegExp(tagExp, 'g')).filter(e => !!e);
-        console.log(e);
         // tagNode.context = e;
         const matched = strs.match(/[\w]+/g);
-        console.log(matched);
         tagNode.type = (matched || [])[0] as '';
         return tagNode;
     }
@@ -262,9 +284,14 @@ export class WordSplit {
 
     // 创建表格
     createTable(matheToekns: string[]): VNode {
+        matheToekns = matheToekns.filter( e => !!e);
+        let resList: string[] = [];
+        matheToekns.forEach((e) => {
+            resList = resList.concat(e.split('\n|\r'));
+        });
         const tableNodes: TrNode[] = [];
         const tableNode = new TableNode('table');
-        for (const temp of matheToekns) {
+        for (const temp of resList) {
             const tempStr = temp.trim();
             if (tempStr) {
                 const tempTr = this.createTableTr(tempStr);
@@ -522,8 +549,42 @@ export class WordSplit {
                 break;
         }
         if (node) {
-            node.context = context;
+            const children = this.createVnodes([context]);
+            if (children.length > 0) {
+                node.child = children;
+            } else {
+                node.context = context;
+            }
         }
+        return node;
+    }
+
+    createUList(context: string[] = [], level: number): VNode {
+        const node: UListNode = new UListNode('ul');
+        if (context.length > 0) {
+            context.forEach((contextstr) => {
+                const child = this.createLi(contextstr);
+                node.child.push(child);
+            });
+        }
+        return node;
+    }
+
+    createOList(context: string[] = [], level: number): VNode {
+        const node: OListNode = new OListNode('ol');
+        if (context.length > 0) {
+            context.forEach((contextstr) => {
+                const child = this.createLi(contextstr);
+                node.child.push(child);
+            });
+        }
+        return node;
+    }
+
+    createLi(context: string): VNode {
+        const node: LiNode = new LiNode('li');
+        const children = this.createVnodes([context], false);
+        node.child = children;
         return node;
     }
 

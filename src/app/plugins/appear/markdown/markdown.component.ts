@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FileItem } from 'src/app/shared/components/sand-box/sand-box-meta';
 import { HttpService } from './../../../shared/service/http.service';
-const text = `<sub>121212</sub><sup>121212</sup>`
+const text = `
+1. 232323
+2. 23232323
+3. 23232323
+`;
 @Component({
   selector: 'app-markdown',
   templateUrl: './markdown.component.html',
@@ -18,27 +22,25 @@ export class MarkdownComponent implements OnInit {
       constructor() {
         console.log(this);
       }
-    
       ngOnInit(): void {
         setInterval(() => {
           this.count += 1;
         }, 1000);
       }
-    
     }
     ` , lang: 'typescript'
     }
   ];
+
+  value = text;
+
   constructor(
     private httpService: HttpService
   ) { }
 
-  ngOnInit(): void {
-    this.httpService.getData('assets/doc/test.md').subscribe((res) => {
-      console.log(res);
-    });
+  ngOnInit(): void{
+    console.log(this);
   }
 
-  value = text;
 
 }

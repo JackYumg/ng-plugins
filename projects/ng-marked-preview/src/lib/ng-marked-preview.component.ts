@@ -1,0 +1,74 @@
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit,
+  Renderer2, SimpleChanges
+} from '@angular/core';
+import { fromEvent, Observable, Subscription } from 'rxjs';
+import { MarkBaseService } from '../service/mark-base.service';
+@Component({
+  selector: 'lib-ng-marked-preview',
+  template: `
+    <div class="ng-editor-md-workspace-display" #rootElm [innerHtml]="previewText">
+
+    </div>
+  `,
+  styles: [
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
+
+  @Input()
+  context = '';
+
+  previewText = '';
+  clickEvent?: Subscription;
+  constructor(
+    private cdk: ChangeDetectorRef,
+    private markBaseService: MarkBaseService,
+    private elm: ElementRef,
+    private render: Renderer2
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.subscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const e = this.markBaseService.toHtml(this.context);
+    this.previewText = e;
+    this.cdk.detectChanges();
+  }
+
+  subscribe(): void {
+    this.clickEvent = fromEvent(this.elm.nativeElement, 'click').subscribe((event: any) => {
+      if (event.target.classList.contains('code-copy')) {
+        const cdoedd = event.target.parentNode.children[0];
+        const input = this.render.createElement('textarea');
+        document.body.appendChild(input);
+        input.value = cdoedd.innerText;
+        input.select();
+        if (document.execCommand) {
+          const e = document.execCommand('copy');
+          console.log(e);
+          event.target.innerText = '复制成功';
+          let timers: any = 0;
+          if (timers) {
+            clearTimeout(timers);
+          }
+          timers = setTimeout(() => {
+            event.target.innerText = `复制代码`;
+          }, 3000);
+        }
+        document.body.removeChild(input);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.clickEvent) {
+      this.clickEvent.unsubscribe();
+    }
+  }
+}

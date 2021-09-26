@@ -15,6 +15,10 @@
             height: 3rem;
             padding: 0.5rem 0;
 
+            &.extra {
+                float: right;
+            }
+
             .icon {
                 position: relative;
                 float: left;
@@ -30,7 +34,7 @@
                 border-radius: 0;
                 background-size: 576px 72px;
                 border-radius: 3px;
-                background-image: url(./../../assets/svg/editor/icon-editor-toolbar.png);
+                background-image: url(~'./../../assets/svg/editor/icon-editor-toolbar.png');
 
                 &-header {
                     background-position: 3px 3px;
@@ -48,18 +52,44 @@
                     background-position: -69px 3px;
                 }
 
-                &-link{
+                &-link {
                     background-position: -118px 3px;
                 }
-                &-blockquote{
+
+                &-blockquote {
                     background-position: -142px 3px;
                 }
-                &-img{
+
+                &-img {
                     background-position: -165px 3px;
+                }
+
+                &-ol {
+                    background-position: -238px 3px;
+                }
+
+                &-ul {
+                    background-position: -260px 3px;
+                }
+
+                &-preview {
+                    background-position: -405px -45px;
+                }
+
+                &-preview-disable {
+                    background-position: -405px 3px;
+                }
+
+                &-fullScr {
+                    background-position: -453px 3px;
                 }
 
                 &:hover {
                     background-color: #efefef;
+                }
+
+                &-table{
+                    background-position: -215px 3px;
                 }
             }
         }
@@ -79,9 +109,13 @@
 .example-list>li {
     list-style-type: none;
     border-bottom: solid 1px #8b8b8b;
-    h2,h3,h4{
+
+    h2,
+    h3,
+    h4 {
         margin: 6px 0;
     }
+
     &:hover {
         background: gainsboro;
         cursor: pointer;

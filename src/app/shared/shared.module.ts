@@ -7,6 +7,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { iconProviders } from './providers/icon.providers';
 
 const antModules = [
   NzLayoutModule,
@@ -15,7 +16,7 @@ const antModules = [
   NzAvatarModule,
   NzIconModule,
   NzGridModule
-]
+];
 
 @NgModule({
   declarations: [],
@@ -27,6 +28,9 @@ const antModules = [
   exports: [
     ComponentsModule,
     ...antModules
+  ],
+  providers: [
+    iconProviders
   ]
 })
 export class SharedModule { }

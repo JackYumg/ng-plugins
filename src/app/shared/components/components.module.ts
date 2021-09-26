@@ -7,6 +7,7 @@ import { EditOutline } from '@ant-design/icons-angular/icons';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { FormsModule } from '@angular/forms';
+import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-api';
 
 const icons: IconDefinition[] = [EditOutline];
 
@@ -19,10 +20,12 @@ const icons: IconDefinition[] = [EditOutline];
     NzIconModule.forChild(icons),
     NzCodeEditorModule,
     NzTabsModule,
-    FormsModule
+    FormsModule,
+    NgEditorMarkdownModule
   ],
   exports: [
-    SandBoxComponent
+    SandBoxComponent,
+    NgEditorMarkdownModule
   ]
 })
 export class ComponentsModule { }

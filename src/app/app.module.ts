@@ -12,10 +12,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 // 引入你需要的图标，比如你需要 fill 主题的 AccountBook Alert 和 outline 主题的 Alert，推荐 ✔️
-import { AccountBookFill, AlertFill, AlertOutline } from '@ant-design/icons-angular/icons';
+import { AccountBookFill, AlertFill, AlertOutline, UserOutline, GithubOutline, ApiOutline } from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { HttpClientModule } from '@angular/common/http';
-const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
+const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill, UserOutline, GithubOutline, ApiOutline];
 
 const ANT_MODULES = [
   NzLayoutModule,
@@ -32,7 +32,7 @@ const SHARED_ANT_MODULES = [
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     AppRoutingModule,
     ...ANT_MODULES,
