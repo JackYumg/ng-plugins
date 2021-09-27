@@ -12,6 +12,7 @@ export class NgMarkedPreviewComponent implements OnInit {
   previewText = '';
   fileList: FileItem[] = [
     { name: 'index.html', lang: 'html', content: '<lib-ng-marked-preview [context]="previewText" ></lib-ng-marked-preview>' },
+    { name: 'marked.md' , lang: 'md' , content: ''},
     {
       name: 'index.ts', lang: 'typescript', content: `
       import { Component, OnInit } from '@angular/core';
@@ -22,6 +23,17 @@ export class NgMarkedPreviewComponent implements OnInit {
       })
       export class NgMarkedPreviewComponent implements OnInit {
         previewText = '# Ng-Marked-Preview';
+        ngOnInit(): void {
+          this.getData();
+        }
+        // 获取预览的md
+        getData(): void {
+          this.httpService.getText('assets\\example\\marked.md').subscribe((e: string) => {
+            this.previewText = e.trim();
+            this.fileList[1].content = e.trim();
+            this.cdk.detectChanges();
+          });
+        }
       }
     ` }
   ];
@@ -44,8 +56,9 @@ export class NgMarkedPreviewComponent implements OnInit {
 
   // 获取预览的md
   getData(): void {
-    this.httpService.getText('assets\\doc\\marked.md').subscribe((e: string) => {
+    this.httpService.getText('assets\\example\\marked.md').subscribe((e: string) => {
       this.previewText = e.trim();
+      this.fileList[1].content = e.trim();
       this.cdk.detectChanges();
     });
   }
