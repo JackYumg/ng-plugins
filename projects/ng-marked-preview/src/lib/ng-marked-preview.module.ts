@@ -32,17 +32,4 @@ export class NgMarkedPreviewModule {
   ) {
 
   }
-  static forRoot(option: any): ModuleWithProviders {
-    return {
-      ngModule: NgMarkedPreviewModule,
-      providers: [
-        provideMarkedOption(option),
-        {
-          provide: MARKED_FORROOT_OPTION,
-          useFactory: NgMarkedPreviewService,
-          deps: [[new Optional(), new SkipSelf()]]
-        }
-      ]
-    };
-  }
 }

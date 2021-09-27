@@ -26,7 +26,7 @@ import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api
     NgDigitalModule,
     SharedModule,
     ColorPickerModule,
-    NgMarkedPreviewModule.forRoot({}),
+    NgMarkedPreviewModule,
     FormsModule,
     ReactiveFormsModule
   ]

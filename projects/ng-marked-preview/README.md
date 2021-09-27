@@ -1,24 +1,71 @@
-# NgMarkedPreview
+# Ng-Marked-Preview
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.8.
+markdown编辑与展示
 
-## Code scaffolding
+## 安装
 
-Run `ng generate component component-name --project ng-marked-preview` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ng-marked-preview`.
-> Note: Don't forget to add `--project ng-marked-preview` or else it will be added to the default project in your `angular.json` file. 
+```bash
+npm i ng-marked-preview 
+```
 
-## Build
+<br/>
 
-Run `ng build ng-marked-preview` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+yarn add ng-marked-p
+```
+## 如何使用
 
-## Publishing
+### Typescript
 
-After building your library with `ng build ng-marked-preview`, go to the dist folder `cd dist/ng-marked-preview` and run `npm publish`.
+```typescript
+import { NgMarkedPreviewModule } from 'ng-marked-preview';
+@NgModule({
+  declarations: [
+    // ...something
+  ],
+  imports: [
+    // ...otherModules
+    NgMarkedPreviewModule
+  ]
+})
+export class **Module { }
+```
 
-## Running unit tests
+## 基本用法
 
-Run `ng test ng-marked-preview` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### html
 
-## Further help
+```html
+<lib-ng-marked-preview [context]="previewText"></lib-ng-marked-preview>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+> `vue` 版本 [传送门](https://imzbf.github.io/md-editor-v3/)
+
+
+## API
+
+### ng-editor-markdown
+
+|参数|说明|类型|默认值|支持全局配置|
+|-|-|-|-|-|
+|option|编辑器配置项|`MarkdownOption`| ... | 是|
+|context|内容传入markdown文本|`string`|| 否|
+
+### MarkBaseService
+
+|成员|说明|类型|默认值|支持全局配置|
+|-|-|-|-|-|
+|toHtml|将markdown转化为html|`function (content: string)`|-||
+|useRender|扩展渲染函数，扩展方式参照[marked](https://marked.js.org/using_pro#renderer)|`function (render)`|-||
+|useToken|扩展解析函数，扩展方式参照[marked](https://marked.js.org/using_pro#tokenizer)|`function (tokenizer)`|-||
+
+#### 扩展例子
+
+```typescript
+constructor( private markBaseService: MarkBaseService) {
+    const render = {
+        code: (text: string, infostring: string) : string
+    };
+    this.markBaseService.useRender(render);
+}
+```

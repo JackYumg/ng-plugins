@@ -8,6 +8,7 @@ import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { FormsModule } from '@angular/forms';
 import { NgEditorMarkdownModule } from 'projects/ng-editor-markdown/src/public-api';
+import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 
 const icons: IconDefinition[] = [EditOutline];
 
@@ -21,7 +22,8 @@ const icons: IconDefinition[] = [EditOutline];
     NzCodeEditorModule,
     NzTabsModule,
     FormsModule,
-    NgEditorMarkdownModule
+    NgEditorMarkdownModule,
+    NgMarkedPreviewModule
   ],
   exports: [
     SandBoxComponent,

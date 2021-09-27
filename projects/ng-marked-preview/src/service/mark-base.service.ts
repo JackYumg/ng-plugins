@@ -35,64 +35,68 @@ const unescapeTest = /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/ig;
 })
 export class MarkBaseService {
 
-  markInstance = marked;
-  baseOption = {
+  private markInstance = marked;
+  private baseOption = {
 
   };
+
+  // 默认扩展了的渲染器
+  private defaultRender = {
+    code: (text: string, infostring: string) => {
+      const lang = ((infostring || '').match(/\S*/) || [])[0] || '';
+      const e: string = hljs.default.highlightAuto(text, [lang]).value;
+      return `<pre class="language-${lang}"><code >${e}</code>${this.copyCode}</pre>`;
+    },
+    text: (text: string) => {
+      const match = text.match(/^\$[\s|\S]+\$$/);
+      if (match) {
+        text = match[0].split(/^[\$]+|[\$]+$/).join('').split('\n').join('');
+        const html = katex.renderToString(text, { throwOnError: false });
+        console.log(html);
+        return html;
+      }
+      return text;
+    }
+  };
+
+  // 默认扩展了的解析器
+  private defaultTokenizer = {
+    inlineText: (src: string) => {
+      const match = src.match(/^\$[\s|\S]+\$$/);
+      if (match) {
+        return {
+          type: 'text',
+          raw: match[0],
+          text: src
+        };
+      }
+      return false;
+    }
+  };
+
 
   copyCode = this.addCopyCode();
   // 默认自己加一个代码编译函数
   constructor() {
-    // 代码渲染函数
-    const renderer = {
-      code: (text: string, infostring: string) => {
-        const lang = ((infostring || '').match(/\S*/) || [])[0] || '';
-        const e: string = hljs.default.highlightAuto(text, [lang]).value;
-        return `<pre><code >${e}</code>${this.copyCode}</pre>`;
-      },
-      text: (text: string, infostring: string) => {
-        const match = text.match(/^\$[\s|\S]+\$$/);
-        if (match) {
-          text = match[0].split(/^[\$]+|[\$]+$/).join('').split('\n').join('');
-          const html = katex.renderToString(text, { throwOnError: false });
-          console.log(html);
-          return html;
-        }
-        return text;
-      }
-    };
-
-    const tokenizer = {
-      inlineText: (src: string) => {
-        const match = src.match(/^\$[\s|\S]+\$$/);
-        if (match) {
-          return {
-            type: 'text',
-            raw: match[0],
-            text: src
-          };
-        }
-        return false;
-      }
-    };
-
-    this.use(renderer);
-    this.useToken(tokenizer);
+    this.useRender(this.defaultRender);
+    this.useToken(this.defaultTokenizer);
   }
 
-  addCopyCode(): string {
+  private addCopyCode(): string {
     return ` <span class="code-copy">复制代码</span>`;
   }
 
-  toHtml(context: string): string {
-    return this.markInstance(context);
+  // 以下是开放给用户的接口
+
+  toHtml(context: string = ''): string {
+    return this.markInstance(context , this.baseOption);
   }
 
-  use(renderer: any): void {
-    this.markInstance.use({ renderer });
+  useRender(renderer: any): void {
+    this.markInstance.use({ renderer: { ...this.defaultRender, ...renderer } });
   }
 
   useToken(tokenizer: any): void {
-    this.markInstance.use({ tokenizer });
+    this.markInstance.use({ tokenizer: {...this.defaultTokenizer , ...tokenizer} });
   }
 }
