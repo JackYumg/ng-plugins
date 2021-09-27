@@ -344,6 +344,46 @@
           }
         }
       }
+    },
+    "ng-marked-editor": {
+      "projectType": "library",
+      "root": "projects/ng-marked-editor",
+      "sourceRoot": "projects/ng-marked-editor/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ng-marked-editor/tsconfig.lib.json",
+            "project": "projects/ng-marked-editor/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ng-marked-editor/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-marked-editor/src/test.ts",
+            "tsConfig": "projects/ng-marked-editor/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-marked-editor/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-marked-editor/tsconfig.lib.json",
+              "projects/ng-marked-editor/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng-plugins"

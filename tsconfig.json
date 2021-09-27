@@ -28,6 +28,10 @@
         "dist/ng-editor-markdown/ng-editor-markdown",
         "dist/ng-editor-markdown"
       ],
+      "ng-marked-editor": [
+        "dist/ng-marked-editor/ng-marked-editor",
+        "dist/ng-marked-editor"
+      ],
       "ng-marked-preview": [
         "dist/ng-marked-preview/ng-marked-preview",
         "dist/ng-marked-preview"
