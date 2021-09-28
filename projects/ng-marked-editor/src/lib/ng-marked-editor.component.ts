@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgMarkedEditorOption } from '../types/editor';
 
 @Component({
   selector: 'lib-ng-marked-editor',
-  template: `
-    <p>
-      ng-marked-editor works!
-    </p>
-  `,
+  templateUrl: './ng-marked-editor.html',
   styles: [
+  ],
+  styleUrls: [
+    './styles/ng-marked-editor.component.less'
   ]
 })
 export class NgMarkedEditorComponent implements OnInit {
+  @Input()
+  option: NgMarkedEditorOption = {
+    saveOption: {
+      autoSave: false,
+    }
+  };
+
+  value = '';
 
   constructor() { }
 

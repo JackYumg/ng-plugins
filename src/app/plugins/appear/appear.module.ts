@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from './markdown/markdown.component';
 import { NgMarkedPreviewComponent } from './ng-marked-preview/ng-marked-preview.component';
 import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
+import { NgMarkedEditorComponent } from './ng-marked-editor/ng-marked-editor.component';
+import { NgMarkedEditorModule } from 'projects/ng-marked-editor/src/public-api';
 
 
 @NgModule({
@@ -19,6 +21,7 @@ import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api
     ColorPickerComponent,
     MarkdownComponent,
     NgMarkedPreviewComponent,
+    NgMarkedEditorComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,7 @@ import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api
     SharedModule,
     ColorPickerModule,
     NgMarkedPreviewModule,
+    NgMarkedEditorModule,
     FormsModule,
     ReactiveFormsModule
   ]

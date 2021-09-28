@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   ) {
 
   }
-  ngOnInit() {
+  ngOnInit(): void {
     setInterval(() => {
       this.data += Math.random() * 100;
     }, 2000);

@@ -1,0 +1,37 @@
+:host {
+    width: 100%;
+
+    .md-editor {
+        font-size: 16px;
+        width: 100%;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
+
+        &-tool-bar {
+            width: 100%;
+            display: block;
+        }
+
+        &-container {
+            display: flex;
+        }
+
+        &-divider {
+            width: 1px;
+            background: gainsboro;
+        }
+
+        &-textarea {
+            flex: 1;
+            border: none;
+            resize: none;
+            outline: none;
+            padding: 0.8em;
+        }
+
+        &-preview {
+            flex: 1;
+            padding: 0.8em;
+        }
+    }
+}

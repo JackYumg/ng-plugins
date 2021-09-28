@@ -52,7 +52,6 @@ export class MarkBaseService {
       if (match) {
         text = match[0].split(/^[\$]+|[\$]+$/).join('').split('\n').join('');
         const html = katex.renderToString(text, { throwOnError: false });
-        console.log(html);
         return html;
       }
       return text;
