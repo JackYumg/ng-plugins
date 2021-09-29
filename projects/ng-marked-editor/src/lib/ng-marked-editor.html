@@ -1,7 +1,7 @@
-<div class="md-editor">
-    <lib-tool-bar class="md-editor-tool-bar"></lib-tool-bar>
+<div class="md-editor" #ngMarkedEditorTpl>
+    <lib-tool-bar class="md-editor-tool-bar" (clickEvent)="toolbarClick($event)"></lib-tool-bar>
     <div class="md-editor-container">
-        <textarea class="md-editor-textarea" [(ngModel)]="value" rows="16"></textarea>
+        <textarea  class="md-editor-textarea" [(ngModel)]="value" rows="16"></textarea>
         <ng-container>
             <div class="md-editor-divider"></div>
             <lib-ng-marked-preview class="md-editor-preview" [context]="value"></lib-ng-marked-preview>

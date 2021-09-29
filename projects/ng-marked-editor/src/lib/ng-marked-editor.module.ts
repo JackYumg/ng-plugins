@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
@@ -14,7 +15,8 @@ import { ToolBarComponent } from './tool-bar/tool-bar.component';
   imports: [
     NgMarkedPreviewModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   exports: [
     NgMarkedEditorComponent

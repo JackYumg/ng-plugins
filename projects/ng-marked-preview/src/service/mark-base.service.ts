@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as marked from 'marked';
 import * as hljs from 'highlight.js';
 import * as katex from 'katex';
+import * as mermaid from 'mermaid';
 const escapeTest = /[&<>"']/;
 const escapeReplace = /[&<>"']/g;
 const escapeTestNoEncode = /[<>"']|&(?!#?\w+;)/;
@@ -39,13 +40,18 @@ export class MarkBaseService {
   private baseOption = {
 
   };
-
   // 默认扩展了的渲染器
   private defaultRender = {
     code: (text: string, infostring: string) => {
       const lang = ((infostring || '').match(/\S*/) || [])[0] || '';
-      const e: string = hljs.default.highlightAuto(text, [lang]).value;
-      return `<pre class="language-${lang}"><code >${e}</code>${this.copyCode}</pre>`;
+      if (lang === 'mermaid') {
+        const id = `theGraph${new Date().getTime()}`;
+        const rended = mermaid.default.mermaidAPI.render(id, text);
+        return rended;
+      } else {
+        const e: string = hljs.default.highlightAuto(text, [lang]).value;
+        return `<pre class="language-${lang}"><code >${e}</code>${this.copyCode}</pre>`;
+      }
     },
     text: (text: string) => {
       const match = text.match(/^\$[\s|\S]+\$$/);
@@ -82,13 +88,13 @@ export class MarkBaseService {
   }
 
   private addCopyCode(): string {
-    return ` <span class="code-copy">复制代码</span>`;
+    return `<span class="code-copy">复制代码</span>`;
   }
 
   // 以下是开放给用户的接口
 
   toHtml(context: string = ''): string {
-    return this.markInstance(context , this.baseOption);
+    return this.markInstance(context, this.baseOption);
   }
 
   useRender(renderer: any): void {
@@ -96,6 +102,6 @@ export class MarkBaseService {
   }
 
   useToken(tokenizer: any): void {
-    this.markInstance.use({ tokenizer: {...this.defaultTokenizer , ...tokenizer} });
+    this.markInstance.use({ tokenizer: { ...this.defaultTokenizer, ...tokenizer } });
   }
 }

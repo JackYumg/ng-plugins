@@ -1,3 +1,95 @@
-<ul>
-    <li>1212</li>
+<ul class="icon-ul">
+    <li class="icon-ul-li" *ngFor="let i of baseGroup1">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                <use [attr.xlink:href]="i.name"></use>
+            </svg>
+        </span>
+    </li>
+</ul>
+
+<span class="divider"></span>
+
+<ul class="icon-ul">
+    <li class="icon-ul-li" *ngFor="let i of baseGroup2">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                <use [attr.xlink:href]="i.name"></use>
+            </svg>
+        </span>
+    </li>
+</ul>
+
+<span class="divider"></span>
+<ul class="icon-ul">
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024">
+                <use xlink:href="#icon-code-row"></use>
+            </svg>
+        </span>
+    </li>
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024">
+                <use xlink:href="#icon-code"></use>
+            </svg> </span>
+    </li>
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024">
+                <use xlink:href="#icon-link"></use>
+            </svg> </span>
+    </li>
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024">
+                <use xlink:href="#icon-image"></use>
+            </svg> </span>
+    </li>
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024" aria-hidden="true">
+                <use xlink:href="#icon-table"></use>
+            </svg>
+        </span>
+    </li>
+</ul>
+
+<!-- 更多功能 -->
+<span class="divider"></span>
+<ul class="icon-ul">
+    <li class="icon-ul-li" *ngFor="let i of moreFunction">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                <use [attr.xlink:href]="i.name"></use>
+            </svg>
+        </span>
+    </li>
+</ul>
+
+<!--  -->
+<ng-container>
+    <span class="divider"></span>
+    <ul class="icon-ul right">
+        <li class="icon-ul-li" *ngFor="let i of optGroup">
+            <span class="icon-ul-li-icon">
+                <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                    <use [attr.xlink:href]="i.name"></use>
+                </svg>
+            </span>
+        </li>
+    </ul>
+</ng-container>
+
+
+<!-- 右边部分按钮 -->
+<ul class="icon-ul">
+    <li class="icon-ul-li" *ngFor="let i of rightGroup">
+        <span class="icon-ul-li-icon">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                <use [attr.xlink:href]="i.name"></use>
+            </svg>
+        </span>
+    </li>
 </ul>

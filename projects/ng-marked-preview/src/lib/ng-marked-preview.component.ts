@@ -1,32 +1,40 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit,
+  Output,
   Renderer2, SimpleChanges
 } from '@angular/core';
-import { fromEvent, Observable, Subscription } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { fromEvent, Subscription } from 'rxjs';
 import { MarkBaseService } from '../service/mark-base.service';
+import { NgMarkedPreviewService } from './ng-marked-preview.service';
 @Component({
   selector: 'lib-ng-marked-preview',
   template: `
-    <div class="ng-editor-md-workspace-display" #rootElm [innerHtml]="previewText">
-
-    </div>
+    <div class="ng-editor-md-workspace-display" #rootElm [innerHtml]="previewText"></div>
   `,
   styles: [
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    NgMarkedPreviewService
+  ]
 })
 export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   context = '';
 
-  previewText = '';
+  @Output()
+  scrollEvent: EventEmitter<Event> = new EventEmitter<Event>();
+
+  previewText?: SafeHtml;
   clickEvent?: Subscription;
   constructor(
     private cdk: ChangeDetectorRef,
     private markBaseService: MarkBaseService,
     private elm: ElementRef,
-    private render: Renderer2
+    private render: Renderer2,
+    private sanitizer: DomSanitizer
   ) {
 
   }
@@ -37,10 +45,10 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     const e = this.markBaseService.toHtml(this.context);
-    this.previewText = e;
-    this.cdk.detectChanges();
+    this.previewText = this.sanitizer.bypassSecurityTrustHtml(e);
   }
 
+  // 订阅事件
   subscribe(): void {
     this.clickEvent = fromEvent(this.elm.nativeElement, 'click').subscribe((event: any) => {
       if (event.target.classList.contains('code-copy')) {
@@ -64,6 +72,11 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
         document.body.removeChild(input);
       }
     });
+
+    fromEvent(this.elm.nativeElement, 'scroll').subscribe((event: Event | any) => {
+      this.scrollEvent.emit(event);
+    });
+
   }
 
   ngOnDestroy(): void {

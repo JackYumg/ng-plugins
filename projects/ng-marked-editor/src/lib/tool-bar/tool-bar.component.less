@@ -1,7 +1,46 @@
-:host{
+:host {
     font-size: inherit;
     height: 2.8em;
-    line-height: 2,8em;
+    line-height: 2, 8em;
     width: 100%;
     border-bottom: 1px solid gainsboro;
+    display: flex;
+    justify-items: center;
+    position: relative;
+    .icon-ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        height: 100%;
+        display: inline-flex;
+        &.right{
+            flex: 2;
+        }
+        &-li {
+            padding: 0;
+            margin: 0;
+            display: inline-flex;
+            height: 100%;
+            line-height: 2.8em;
+            margin: 0 -0.2em;
+            &-icon {
+                padding: 0.4em;
+                margin: .2em 0;
+                display: flex;
+                cursor: pointer;
+                svg {
+                    border-radius: 0.19em;
+                    padding: 0 .3em;
+                    &:hover {
+                        background: gainsboro;
+                    }
+                }
+            }
+        }
+    }
+
+    .divider{
+        border-left: 1px solid gainsboro;
+        margin: 0.8em 0.1em;
+    }
 }
