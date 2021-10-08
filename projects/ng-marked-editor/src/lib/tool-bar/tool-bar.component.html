@@ -1,9 +1,42 @@
 <ul class="icon-ul">
-    <li class="icon-ul-li" *ngFor="let i of baseGroup1">
+    <li class="icon-ul-li" *ngFor="let i of baseGroup1" [title]="i.title">
         <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i , $event )">
                 <use [attr.xlink:href]="i.name"></use>
             </svg>
+        </span>
+    </li>
+
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon" cdkOverlayOrigin #overlay="cdkOverlayOrigin">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(baseTitlt , $event )">
+                <use [attr.xlink:href]="baseTitlt.name"></use>
+            </svg>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="overlay"
+                [cdkConnectedOverlayOpen]="baseTitlt.show">
+                <div name="tool" class="overlay-full">
+                    <ul name="tool" class="example-list">
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 1)">
+                            <h1>一级标题</h1>
+                        </li>
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 2)">
+                            <h2>二级标题</h2>
+                        </li>
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 3)">
+                            <h3>三级标题</h3>
+                        </li>
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 4)">
+                            <h4>四级标题</h4>
+                        </li>
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 5)">
+                            <h5>五级标题</h5>
+                        </li>
+                        <li name="tool" (click)="itemClick(baseTitlt , $event , 6)">
+                            <h6>六级标题</h6>
+                        </li>
+                    </ul>
+                </div>
+            </ng-template>
         </span>
     </li>
 </ul>
@@ -12,7 +45,7 @@
 
 <ul class="icon-ul">
     <li class="icon-ul-li" *ngFor="let i of baseGroup2">
-        <span class="icon-ul-li-icon">
+        <span class="icon-ul-li-icon" [title]="i.title">
             <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
                 <use [attr.xlink:href]="i.name"></use>
             </svg>
@@ -22,35 +55,10 @@
 
 <span class="divider"></span>
 <ul class="icon-ul">
-    <li class="icon-ul-li">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024">
-                <use xlink:href="#icon-code-row"></use>
-            </svg>
-        </span>
-    </li>
-    <li class="icon-ul-li">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024">
-                <use xlink:href="#icon-code"></use>
-            </svg> </span>
-    </li>
-    <li class="icon-ul-li">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024">
-                <use xlink:href="#icon-link"></use>
-            </svg> </span>
-    </li>
-    <li class="icon-ul-li">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024">
-                <use xlink:href="#icon-image"></use>
-            </svg> </span>
-    </li>
-    <li class="icon-ul-li">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024" aria-hidden="true">
-                <use xlink:href="#icon-table"></use>
+    <li class="icon-ul-li" *ngFor="let i of baseGroup3">
+        <span class="icon-ul-li-icon" [title]="i.title">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
+                <use [attr.xlink:href]="i.name"></use>
             </svg>
         </span>
     </li>
@@ -59,11 +67,59 @@
 <!-- 更多功能 -->
 <span class="divider"></span>
 <ul class="icon-ul">
-    <li class="icon-ul-li" *ngFor="let i of moreFunction">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
-                <use [attr.xlink:href]="i.name"></use>
+    <li class="icon-ul-li" >
+        <span class="icon-ul-li-icon" [title]="moreFunction[0].title" cdkOverlayOrigin #liuchengtu="cdkOverlayOrigin">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(moreFunction[0] , $event)">
+                <use xlink:href="#icon-liuchengtu"></use>
             </svg>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="liuchengtu"
+                [cdkConnectedOverlayOpen]="moreFunction[0].show">
+                <div name="tool" class="overlay-full">
+                    <ul name="tool" class="example-list">
+                        <li name="tool">
+                            <h3>流程图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>时序图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>状态图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>类图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>饼图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>甘特图</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>甘特图</h3>
+                        </li>
+                    </ul>
+                </div>
+            </ng-template>
+        </span>
+    </li>
+    <li class="icon-ul-li">
+        <span class="icon-ul-li-icon" [title]="moreFunction[1].title" cdkOverlayOrigin #gongshi="cdkOverlayOrigin">
+            <svg viewBox="0 0 1024 1024" (click)="itemClick(moreFunction[1] , $event)">
+                <use xlink:href="#icon-gongshi"></use>
+            </svg>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="gongshi"
+                [cdkConnectedOverlayOpen]="moreFunction[1].show">
+                <div name="tool" class="overlay-full">
+                    <ul name="tool" class="example-list">
+                        <li name="tool">
+                            <h3>行内公式</h3>
+                        </li>
+                        <li name="tool">
+                            <h3>行间公式</h3>
+                        </li>
+                    </ul>
+                </div>
+            </ng-template>
         </span>
     </li>
 </ul>
@@ -73,7 +129,7 @@
     <span class="divider"></span>
     <ul class="icon-ul right">
         <li class="icon-ul-li" *ngFor="let i of optGroup">
-            <span class="icon-ul-li-icon">
+            <span class="icon-ul-li-icon" [title]="i.title">
                 <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
                     <use [attr.xlink:href]="i.name"></use>
                 </svg>
@@ -86,7 +142,7 @@
 <!-- 右边部分按钮 -->
 <ul class="icon-ul">
     <li class="icon-ul-li" *ngFor="let i of rightGroup">
-        <span class="icon-ul-li-icon">
+        <span class="icon-ul-li-icon" [title]="i.title">
             <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
                 <use [attr.xlink:href]="i.name"></use>
             </svg>

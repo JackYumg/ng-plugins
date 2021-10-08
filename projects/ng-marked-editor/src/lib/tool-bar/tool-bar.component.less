@@ -7,15 +7,18 @@
     display: flex;
     justify-items: center;
     position: relative;
+
     .icon-ul {
         margin: 0;
         padding: 0;
         list-style: none;
         height: 100%;
         display: inline-flex;
-        &.right{
+
+        &.right {
             flex: 2;
         }
+
         &-li {
             padding: 0;
             margin: 0;
@@ -23,14 +26,17 @@
             height: 100%;
             line-height: 2.8em;
             margin: 0 -0.2em;
+
             &-icon {
                 padding: 0.4em;
                 margin: .2em 0;
                 display: flex;
                 cursor: pointer;
+
                 svg {
                     border-radius: 0.19em;
                     padding: 0 .3em;
+
                     &:hover {
                         background: gainsboro;
                     }
@@ -39,8 +45,38 @@
         }
     }
 
-    .divider{
+    .divider {
         border-left: 1px solid gainsboro;
         margin: 0.8em 0.1em;
     }
+}
+
+
+.example-list {
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    background: #fff;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+}
+
+.example-list>li {
+    list-style-type: none;
+    border-bottom: solid 1px #8b8b8b;
+
+    h2,
+    h3,
+    h4 {
+        margin: 6px 0;
+    }
+
+    &:hover {
+        background: gainsboro;
+        cursor: pointer;
+    }
+}
+
+.example-list>li:last-child {
+    border-bottom: none;
 }

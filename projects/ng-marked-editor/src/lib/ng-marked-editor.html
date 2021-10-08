@@ -1,10 +1,16 @@
-<div class="md-editor" #ngMarkedEditorTpl>
+<div class="md-editor" [class.fangda]="editorState.zoom" #ngMarkedEditorTpl>
     <lib-tool-bar class="md-editor-tool-bar" (clickEvent)="toolbarClick($event)"></lib-tool-bar>
     <div class="md-editor-container">
-        <textarea  class="md-editor-textarea" [(ngModel)]="value" rows="16"></textarea>
+        <textarea #textareaTpl  class="md-editor-textarea" [(ngModel)]="value" rows="16"></textarea>
         <ng-container>
-            <div class="md-editor-divider"></div>
-            <lib-ng-marked-preview class="md-editor-preview" [context]="value"></lib-ng-marked-preview>
+            <div class="md-editor-divider" [class.hidden]="!editorState.preview || editorState.code"></div>
+            <lib-ng-marked-preview class="md-editor-preview" (valueChange)="previewValueChange($event)" [class.hidden]="!editorState.preview || editorState.code" [context]="value"></lib-ng-marked-preview>
+        </ng-container>
+        <ng-container>
+            <div class="md-editor-divider" [class.hidden]="!editorState.code"></div>
+            <p class="md-editor-code" [class.hidden]="!editorState.code">
+                {{domText}}
+            </p>
         </ng-container>
     </div>
 </div>

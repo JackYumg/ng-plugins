@@ -27,6 +27,9 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   scrollEvent: EventEmitter<Event> = new EventEmitter<Event>();
 
+  @Output()
+  valueChange: EventEmitter<string> = new EventEmitter<string>();
+
   previewText?: SafeHtml;
   clickEvent?: Subscription;
   constructor(
@@ -46,6 +49,7 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     const e = this.markBaseService.toHtml(this.context);
     this.previewText = this.sanitizer.bypassSecurityTrustHtml(e);
+    this.valueChange.emit(e);
   }
 
   // 订阅事件

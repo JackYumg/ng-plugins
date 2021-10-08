@@ -50,7 +50,7 @@ export class MarkBaseService {
         return rended;
       } else {
         const e: string = hljs.default.highlightAuto(text, [lang]).value;
-        return `<pre class="language-${lang}"><code >${e}</code>${this.copyCode}</pre>`;
+        return `<pre class="language-${lang}"><code>${e}</code>${this.copyCode}</pre>`;
       }
     },
     text: (text: string) => {
