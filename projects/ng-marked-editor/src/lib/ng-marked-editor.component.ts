@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { NgMarkedEditorOption } from '../types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
+import { ImageUploadComponent } from './image-upload/image-upload.component';
+import { LinkUploadComponent } from './link-upload/link-upload.component';
+import { MdModalService } from './md-modal/md-modal.service';
 import { NgMarkedEditorService } from './ng-marked-editor.service';
 import { TextareaSelectionService } from './utils/textarea-selection.service';
 
@@ -15,7 +18,6 @@ import { TextareaSelectionService } from './utils/textarea-selection.service';
     './styles/ng-marked-editor.component.less'
   ],
   providers: [
-    NgMarkedEditorService,
     EditorOptService,
     EditorStateManageService
   ],
@@ -55,19 +57,23 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private ngMarkedEditorService: NgMarkedEditorService,
     private textareaSelectionService: TextareaSelectionService,
     private editorOptService: EditorOptService,
-    private elm: ElementRef
+    private elm: ElementRef,
+    private mdModalService: MdModalService,
+    private cdk: ChangeDetectorRef
   ) {
     this.editorState = this.editorOptService.state;
   }
 
   ngOnInit(): void {
     this.subscribeKeyboadeEvent();
+    this.subscribeModalEvent();
   }
 
+  listDoing = false;
   // 点击工具条按钮时的响应方法
   toolbarClick($event: any): void {
-    const { name, item , value } = $event;
-    const { type , salis } = item;
+    const { name, item, value } = $event;
+    const { type, salis } = item;
     function dealFunction(e: string, index: number): string {
       if (index === 0) {
         return e;
@@ -95,7 +101,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     } else if (type === 'insert') { // 能够直接插入的
       const section = this.textareaSelectionService.getSelection(this.textareaRef?.nativeElement);
       if (this.editorOptService[name as 'bold']) {
-        const res = this.editorOptService[name as 'bold' | 'title'](this.value, section  , value);
+        const res = this.editorOptService[name as 'bold' | 'title'](this.value, section, value);
         this.value = res.value;
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
@@ -106,10 +112,21 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
+        if (salis === 'ulList' || salis === 'olList') {
+          this.listDoing = true;
+          return;
+        }
+      }
+    } else if (type === 'modal') {// 如果是弹出框
+      if (name === 'image') {
+        this.mdModalService.create(ImageUploadComponent);
+      } else if (name === 'link') {
+        this.mdModalService.create(LinkUploadComponent);
       }
     }
   }
 
+  // 订阅键盘的事件
   subscribeKeyboadeEvent(): void {
     let isPressed = false;
     let eventStatk = [];
@@ -121,6 +138,20 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
       e.preventDefault();
       isPressed = false;
       eventStatk = [];
+    });
+  }
+
+  // 订阅模态框的事件
+  subscribeModalEvent(): void {
+    this.ngMarkedEditorService.fileUploadEvent.subscribe((result) => {
+      const { type } = result;
+      if (type === 'image' || type === 'link') {
+        const section = this.textareaSelectionService.getSelection(this.textareaRef?.nativeElement);
+        const res = this.editorOptService[type as 'image'](this.value, section, result);
+        this.value = res.value;
+        this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
+        this.cdk.detectChanges();
+      }
     });
   }
 

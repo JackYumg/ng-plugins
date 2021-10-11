@@ -27,14 +27,14 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     { name: '#icon-sub', title: '下标', type: 'insert' },
     { name: '#icon-sup', type: 'insert', title: '上标' },
     { name: '#icon-quote', type: 'insert', title: '引用' },
-    { name: '#icon-unordered-list', type: 'insert', title: '无序列表' },
-    { name: '#icon-ordered-list', type: 'insert', title: '有序列表' },
+    { name: '#icon-unordered-list', type: 'insert', title: '无序列表', salis: 'ulList' },
+    { name: '#icon-ordered-list', type: 'insert', title: '有序列表' , salis: 'olList'},
   ];
 
   baseGroup3 = [
-    { name: '#icon-code-row', title: '行内代码', type: 'insert' },
+    { name: '#icon-code-row', title: '行内代码', type: 'insert', salis: 'codeRow' },
     { name: '#icon-code', title: '代码块', type: 'insert' },
-    { name: '#icon-link', title: '链接', type: 'insert' },
+    { name: '#icon-link', title: '链接', type: 'modal' },
     { name: '#icon-image', title: '图片', type: 'modal' },
     { name: '#icon-table', title: '表格', type: 'insert' },
   ];
@@ -79,7 +79,7 @@ export class ToolBarComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.globalEvent = fromEvent(window, 'keydown').subscribe((e: KeyboardEvent | any) => {
+    this.globalEvent = fromEvent(window, 'keyup').subscribe((e: KeyboardEvent | any) => {
       if (String.prototype.toLowerCase.call(e.code) === 'f11') {
         e.preventDefault();
         this.itemClick(this.rightGroup[2]);
@@ -104,7 +104,7 @@ export class ToolBarComponent implements OnInit, OnDestroy {
           item.show = false;
         }
       });
-      if(e) {
+      if (e) {
         this.clickEvent.emit({ item: i, name, value: e });
       }
     } else {

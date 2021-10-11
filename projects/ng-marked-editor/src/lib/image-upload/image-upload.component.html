@@ -1,0 +1,50 @@
+<div class="modal-container" [ngStyle]="defaultStyle">
+    <div class="modal-title">
+        <h3>添加图片</h3>
+    </div>
+    <div class="modal-tabset">
+        <div class="modal-tabset-tab" (click)="activeTab('upload')" [class.active]="optType === 'upload'">
+            <h3>上传图片</h3>
+        </div>
+        <div class="modal-tabset-tab" (click)="activeTab('online')" [class.active]="optType === 'online'">
+            <h3>在线图片</h3>
+        </div>
+    </div>
+    <div class="modal-content">
+        <div class="modal-content" *ngIf="optType === 'upload'">
+            <div class="modal-content-upload">
+                <p>
+                    <input type="file" (change)="fileuploadChange($event)">
+                </p>
+                <p>
+                    <input [(ngModel)]="url" type="text" placeholder="图片地址">
+                </p>
+                <p>
+                    <input [(ngModel)]="desc" type="text" placeholder="描述">
+                </p>
+            </div>
+            <div class="modal-content-btns">
+                <button [disabled]="files.length <= 0" (click)="uploadFile()">上传</button>
+                &nbsp;
+                <button (click)="confirm()" *ngIf="url">确认</button>
+                &nbsp;
+                <button (click)="cancel()">取消</button>
+            </div>
+        </div>
+        <div class="modal-content" *ngIf="optType === 'online'">
+            <div class="modal-content-upload">
+                <p>
+                    <input [(ngModel)]="url" type="text" placeholder="图片地址">
+                </p>
+                <p>
+                    <input [(ngModel)]="desc" type="text" placeholder="描述">
+                </p>
+            </div>
+            <div class="modal-content-btns">
+                <button (click)="confirm()" *ngIf="url">确认</button>
+                &nbsp;
+                <button (click)="cancel()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

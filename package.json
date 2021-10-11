@@ -18,6 +18,7 @@
     "package": "ng build ng-digital --prod --baseurl='./",
     "pkg:editor": "ng build ng-editor-markdown --prod",
     "pkg:preview": "ng build ng-marked-preview --prod",
+    "pkg:marked": "ng build ng-marked-editor --prod",
     "dev:ssr": "ng run ng-plugins:serve-ssr",
     "serve:ssr": "node dist/ng-plugins/server/main.js",
     "build:ssr": "ng build --prod && ng run ng-plugins:server:production",

@@ -85,7 +85,7 @@ export class TextareaSelectionService {
     if (textarea.setSelectionRange) {
       textarea.setSelectionRange(start, end);
     } else if (textarea.createTextRange) {
-      let rang = textarea.createTextRange();
+      const rang = textarea.createTextRange();
       rang.collapse(true);
       rang.moveStart('character', start);
       rang.moveEnd('character', end - start);

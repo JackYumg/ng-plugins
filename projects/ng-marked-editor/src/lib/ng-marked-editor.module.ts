@@ -7,7 +7,8 @@ import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MenuDirective } from './menu.directive';
 import { MdModalComponent } from './md-modal/md-modal.component';
-
+import { ImageUploadComponent } from './image-upload/image-upload.component';
+import { LinkUploadComponent } from './link-upload/link-upload.component';
 
 @NgModule({
   declarations: [
@@ -15,19 +16,20 @@ import { MdModalComponent } from './md-modal/md-modal.component';
     ToolBarComponent,
     MenuDirective,
     MdModalComponent,
+    ImageUploadComponent,
+    LinkUploadComponent,
   ],
   imports: [
     NgMarkedPreviewModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    OverlayModule
+    OverlayModule,
   ],
   exports: [
-    NgMarkedEditorComponent
+    NgMarkedEditorComponent,
   ],
   providers: [
-
   ]
 })
 export class NgMarkedEditorModule { }

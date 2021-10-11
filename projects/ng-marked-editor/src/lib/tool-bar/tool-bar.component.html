@@ -76,26 +76,26 @@
                 [cdkConnectedOverlayOpen]="moreFunction[0].show">
                 <div name="tool" class="overlay-full">
                     <ul name="tool" class="example-list">
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'lct')">
                             <h3>流程图</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'sxt')">
                             <h3>时序图</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'ztt')">
                             <h3>状态图</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'lt')">
                             <h3>类图</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'bt')">
                             <h3>饼图</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'gtt')">
                             <h3>甘特图</h3>
                         </li>
-                        <li name="tool">
-                            <h3>甘特图</h3>
+                        <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'ert')">
+                            <h3>ER图</h3>
                         </li>
                     </ul>
                 </div>
@@ -111,10 +111,10 @@
                 [cdkConnectedOverlayOpen]="moreFunction[1].show">
                 <div name="tool" class="overlay-full">
                     <ul name="tool" class="example-list">
-                        <li name="tool">
+                        <li name="tool"  (click)="itemClick(moreFunction[1] , $event , 'inner')">
                             <h3>行内公式</h3>
                         </li>
-                        <li name="tool">
+                        <li name="tool"  (click)="itemClick(moreFunction[1] , $event , 'padding')">
                             <h3>行间公式</h3>
                         </li>
                     </ul>

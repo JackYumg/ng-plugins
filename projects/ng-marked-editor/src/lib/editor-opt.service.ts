@@ -2,6 +2,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import * as prettier from 'prettier';
 import * as plugins from 'prettier/parser-markdown';
 import { MdSelection, ResTrans } from '../types/editor';
+import { lctDefaultValue } from './data';
 @Injectable()
 export class EditorOptService {
 
@@ -225,13 +226,19 @@ export class EditorOptService {
   // 引用
   quote(text: string, selection: MdSelection): ResTrans {
     let value = '';
-    let selectStart = 0;
+    let selectStart = 1;
     let selectEnd = 0;
     const arrs = text.split('\n');
     if (arrs[selection.rowNum - 1] || arrs[selection.rowNum - 1] === '') {
       arrs[selection.rowNum - 1] = `>${arrs[selection.rowNum - 1]}`;
     }
     value = arrs.join('\n');
+    arrs.forEach((e, index) => {
+      if (index < selection.rowNum - 1) {
+        selectStart += e.length + 1;
+      }
+    });
+    selectEnd = selectStart + arrs[selection.rowNum - 1].length;
     return {
       value,
       selectStart,
@@ -258,13 +265,222 @@ export class EditorOptService {
       arrs.forEach((e, index) => {
         index += 1;
         if (index === selection.rowNum) {
-          selectStart +=  1;
+          selectStart += 1;
         }
       });
       selectEnd += selectStart + 4;
     }
     const value = arrs.join('\n');
 
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 行内代码块
+  codeRow(text: string, selection: MdSelection): ResTrans {
+    let value = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    if (selection.text) {
+      value = text.substring(0, selection.index) + '`' + selection.text + '`' +
+        text.substring(selection.index + selection.text.length, text.length);
+      selectStart = selection.index + 1;
+      selectEnd = selectStart + selection.text.length;
+    } else {
+      value = text.substring(0, selection.index) + '`代码`' + text.substring(selection.index, text.length) + '';
+      selectStart = selection.index + 1;
+      selectEnd = selectStart + 2;
+    }
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 插入代码块
+  code(text: string, selection: MdSelection): ResTrans {
+    let value = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    if (selection.text) {
+      value = text.substring(0, selection.index) + '```' + selection.text + '```' +
+        text.substring(selection.index + selection.text.length, text.length);
+      selectStart = selection.index + 4;
+      selectEnd = selectStart + selection.text.length;
+    } else {
+      value = text.substring(0, selection.index) + '```\n输入代码\n````' + text.substring(selection.index, text.length) + '';
+      selectStart = selection.index + 4;
+      selectEnd = selectStart + 4;
+    }
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 插入图片
+  image(text: string, selection: MdSelection, data: any): ResTrans {
+    const { desc, path } = data;
+    let value = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    if (selection.text) {
+      value = `${text.substring(0, selection.index)}![${desc}](${path})${text.substring(selection.index + selection.text.length, text.length)}`;
+      selectStart = selection.index + 4;
+      selectEnd = selectStart + selection.text.length;
+    } else {
+      value = `${text.substring(0, selection.index)}![${desc || '描述'}](${path})${text.substring(selection.index, text.length)}`;
+      selectStart = selection.index + 4;
+      selectEnd = selectStart + 2;
+    }
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 插入链接
+  link(text: string, selection: MdSelection, data: any): ResTrans {
+    const { desc, path } = data;
+    let value = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    if (selection.text) {
+      value = `${text.substring(0, selection.index)}[${desc}](${path})${text.substring(selection.index + selection.text.length, text.length)}`;
+      selectStart = selection.index + 3;
+      selectEnd = selectStart + selection.text.length;
+    } else {
+      value = `${text.substring(0, selection.index)}[${desc || '描述'}](${path})${text.substring(selection.index, text.length)}`;
+      selectStart = selection.index + 3;
+      selectEnd = selectStart + 2;
+    }
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 插入表格
+  table(text: string, selection: MdSelection): ResTrans {
+    let value = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    const defaultdata = `| 表列 A | 表列 B |
+| ----- | ----- |
+| 单元 1 | 单元 2 |
+| 单元 3 | 单元 4 |`;
+    if (selection.text) {
+      value = `${text.substring(0, selection.index)}${defaultdata}${text.substring(selection.index + selection.text.length, text.length)}`;
+    } else {
+      value = `${text.substring(0, selection.index)}${defaultdata}${text.substring(selection.index, text.length)}`;
+    }
+    selectStart = selection.index;
+    selectEnd = selectStart + defaultdata.length;
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+
+  // 插入流程图
+  liuchengtu(text: string, selection: MdSelection, value: string): ResTrans {
+    const defaultData = lctDefaultValue[value] || '';
+    const values = `${text.substring(0, selection.index)}${defaultData}${text.substring(selection.index, text.length)}`;
+    let selectStart = 0;
+    let selectEnd = 0;
+    selectStart = selection.index + 3;
+    selectEnd = selectStart + defaultData.length - 7;
+    return {
+      value: values,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 插入公式
+  gongshi(text: string, selection: MdSelection, value: string): ResTrans {
+    let values = '';
+    let selectStart = 0;
+    let selectEnd = 0;
+    if (value === 'inner') {
+      if (selection.text) {
+        values = text.substring(0, selection.index) + '\\\\(' + selection.text + '\\\\)' +
+          text.substring(selection.index + selection.text.length, text.length);
+        selectStart = selection.index + 4;
+        selectEnd = selectStart + selection.text.length;
+      } else {
+        values = text.substring(0, selection.index) + '\\\\(公式\\\\)' + text.substring(selection.index, text.length) + '';
+        selectStart = selection.index + 3;
+        selectEnd = selectStart + 2;
+      }
+    } else if (value === 'padding') {
+      if (selection.text) {
+        values = text.substring(0, selection.index) + '$$\n' + selection.text + '\n$$' +
+          text.substring(selection.index + selection.text.length, text.length);
+        selectStart = selection.index + 3;
+        selectEnd = selectStart + selection.text.length;
+      } else {
+        values = text.substring(0, selection.index) + '$$\n公式\n$$' + text.substring(selection.index, text.length) + '';
+        selectStart = selection.index + 3;
+        selectEnd = selectStart + 2;
+      }
+    }
+
+    return {
+      value: values,
+      selectStart,
+      selectEnd
+    };
+  }
+
+  // 有序列表
+  olList(text: string, selection: MdSelection): ResTrans {
+    let value = '';
+    let selectStart = 3;
+    let selectEnd = 0;
+    const arrs = text.split('\n');
+    if (arrs[selection.rowNum - 1] || arrs[selection.rowNum - 1] === '') {
+      arrs[selection.rowNum - 1] = `1. ${arrs[selection.rowNum - 1]}`;
+    }
+    value = arrs.join('\n');
+    arrs.forEach((e, index) => {
+      if (index < selection.rowNum - 1) {
+        selectStart += e.length + 1;
+      }
+    });
+    selectEnd = selectStart + arrs[selection.rowNum - 1].length;
+    return {
+      value,
+      selectStart,
+      selectEnd
+    };
+  }
+
+   // 无序列表
+   ulList(text: string, selection: MdSelection): ResTrans {
+    let value = '';
+    let selectStart = 2;
+    let selectEnd = 0;
+    const arrs = text.split('\n');
+    if (arrs[selection.rowNum - 1] || arrs[selection.rowNum - 1] === '') {
+      arrs[selection.rowNum - 1] = `- ${arrs[selection.rowNum - 1]}`;
+    }
+    value = arrs.join('\n');
+    arrs.forEach((e, index) => {
+      if (index < selection.rowNum - 1) {
+        selectStart += e.length + 1;
+      }
+    });
+    selectEnd = selectStart + arrs[selection.rowNum - 1].length;
     return {
       value,
       selectStart,
