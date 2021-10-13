@@ -47,6 +47,7 @@
     "marked": "^3.0.3",
     "mermaid": "^8.13.0",
     "monaco-editor": "^0.23.0",
+    "ng-marked-preview": "^0.1.1",
     "ng-zorro-antd": "^11.3.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

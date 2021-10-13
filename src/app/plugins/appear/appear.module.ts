@@ -10,9 +10,9 @@ import { ColorPickerModule } from 'projects/color-picker/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from './markdown/markdown.component';
 import { NgMarkedPreviewComponent } from './ng-marked-preview/ng-marked-preview.component';
-import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 import { NgMarkedEditorComponent } from './ng-marked-editor/ng-marked-editor.component';
 import { NgMarkedEditorModule } from 'projects/ng-marked-editor/src/public-api';
+import { NgMarkedPreviewModule } from 'ng-marked-preview';
 
 
 @NgModule({

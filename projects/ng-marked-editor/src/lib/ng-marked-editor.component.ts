@@ -68,8 +68,6 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     this.subscribeKeyboadeEvent();
     this.subscribeModalEvent();
   }
-
-  listDoing = false;
   // 点击工具条按钮时的响应方法
   toolbarClick($event: any): void {
     const { name, item, value } = $event;
@@ -112,10 +110,6 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
-        if (salis === 'ulList' || salis === 'olList') {
-          this.listDoing = true;
-          return;
-        }
       }
     } else if (type === 'modal') {// 如果是弹出框
       if (name === 'image') {
