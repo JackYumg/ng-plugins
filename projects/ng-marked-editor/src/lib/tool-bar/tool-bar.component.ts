@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
@@ -15,6 +15,12 @@ export class ToolBarComponent implements OnInit, OnDestroy {
 
   @Output()
   clickEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  @Input()
+  hasHistory = false; // 是否有上一步
+
+  @Input()
+  hasFurtrue = false; // 是否有下一步
 
   baseGroup1 = [
     { name: '#icon-bold', title: '加粗', type: 'insert' },
@@ -47,8 +53,8 @@ export class ToolBarComponent implements OnInit, OnDestroy {
   ];
 
   optGroup = [
-    { name: '#icon-revoke', title: '撤销' },
-    { name: '#icon-next' },
+    { name: '#icon-revoke', title: '撤销' ,disabled : 'icon-Revoke'},
+    { name: '#icon-next' , title: '回滚'},
     { name: '#icon-baocun' },
   ];
 
@@ -117,6 +123,7 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     this.cdk.detectChanges();
   }
 
+  // 创建弹框
   createModal(): void {
     const ref = this.overlay.create({
       hasBackdrop: true,

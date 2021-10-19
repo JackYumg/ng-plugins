@@ -47,6 +47,11 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   textareaRef?: ElementRef;
 
   rootValue = '';
+
+  get hasHistory(): boolean{
+    return this.editorStateManageService.stateStacks.length > 0;
+  }
+
   set value(value: string) {
     this.rootValue = value;
     this.editorStateManageService.pushState({value});
@@ -141,6 +146,11 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     fromEvent(this.elm.nativeElement, 'keydown').subscribe((e: KeyboardEvent | any) => {
       isPressed = true;
       eventStatk.push(e);
+      if(this.value !== this.textareaRef?.nativeElement.value) {
+        this.value = this.textareaRef?.nativeElement.value;
+        this.cdk.detectChanges();
+        this.editorStateManageService.pushState({value: this.value})
+      }
     });
     fromEvent(this.elm.nativeElement, 'keyup').subscribe((e: KeyboardEvent | any) => {
       e.preventDefault();
