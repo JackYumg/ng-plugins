@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { NgMarkedEditorOption } from '../types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
+import { EditorStorageService } from './editor-storage.service';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { LinkUploadComponent } from './link-upload/link-upload.component';
 import { MdModalService } from './md-modal/md-modal.service';
@@ -19,7 +21,8 @@ import { TextareaSelectionService } from './utils/textarea-selection.service';
   ],
   providers: [
     EditorOptService,
-    EditorStateManageService
+    EditorStateManageService,
+    EditorStorageService
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -43,7 +46,15 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   @ViewChild('textareaTpl')
   textareaRef?: ElementRef;
 
-  value = '';
+  rootValue = '';
+  set value(value: string) {
+    this.rootValue = value;
+    this.editorStateManageService.pushState({value});
+  }
+
+  get value(): string {
+    return this.rootValue;
+  }
 
   editorState = {
     zoom: false,
@@ -59,7 +70,10 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private editorOptService: EditorOptService,
     private elm: ElementRef,
     private mdModalService: MdModalService,
-    private cdk: ChangeDetectorRef
+    private cdk: ChangeDetectorRef,
+    @Inject(DOCUMENT) private doc: Document,
+    private editorStorageService: EditorStorageService,
+    private editorStateManageService: EditorStateManageService
   ) {
     this.editorState = this.editorOptService.state;
   }

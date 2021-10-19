@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { MdModalComponent } from '../md-modal/md-modal.component';
+import { DOCUMENT } from '@angular/common';
+import { NgMarkedEditorService } from '../ng-marked-editor.service';
 @Component({
   selector: 'lib-tool-bar',
   templateUrl: './tool-bar.component.html',
@@ -28,7 +30,7 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     { name: '#icon-sup', type: 'insert', title: '上标' },
     { name: '#icon-quote', type: 'insert', title: '引用' },
     { name: '#icon-unordered-list', type: 'insert', title: '无序列表', salis: 'ulList' },
-    { name: '#icon-ordered-list', type: 'insert', title: '有序列表' , salis: 'olList'},
+    { name: '#icon-ordered-list', type: 'insert', title: '有序列表', salis: 'olList' },
   ];
 
   baseGroup3 = [
@@ -62,11 +64,13 @@ export class ToolBarComponent implements OnInit, OnDestroy {
   titleOpen = false;
   clickWindowEvent?: Subscription;
   globalEvent?: Subscription;
-
+  resizeEvent?: Subscription;
   constructor(
     public viewContainerRef: ViewContainerRef,
     private cdk: ChangeDetectorRef,
-    private overlay: Overlay
+    private overlay: Overlay,
+    @Inject(DOCUMENT) private doc: Document,
+    private gmeService: NgMarkedEditorService
   ) { }
 
   ngOnInit(): void {
