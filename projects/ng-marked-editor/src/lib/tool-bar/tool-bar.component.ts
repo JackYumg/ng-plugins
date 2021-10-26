@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { MdModalComponent } from '../md-modal/md-modal.component';
-import { DOCUMENT } from '@angular/common';
-import { NgMarkedEditorService } from '../ng-marked-editor.service';
 @Component({
   selector: 'lib-tool-bar',
   templateUrl: './tool-bar.component.html',
@@ -75,8 +73,6 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     public viewContainerRef: ViewContainerRef,
     private cdk: ChangeDetectorRef,
     private overlay: Overlay,
-    @Inject(DOCUMENT) private doc: Document,
-    private gmeService: NgMarkedEditorService
   ) { }
 
   ngOnInit(): void {

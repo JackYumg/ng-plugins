@@ -1,15 +1,16 @@
-// 给编辑框定义的类型
-export interface NgMarkedEditorOption {
-    saveOption: SaveOption
-}
-
 // 保存的配置项
 export interface SaveOption {
     autoSave?: boolean;
 }
+// 给编辑框定义的类型
+export interface NgMarkedEditorOption {
+    saveOption: SaveOption;
+}
+
+
 // 工具栏图标信息
 export interface ToolItem {
-
+    name: string;
 }
 
 // 当前选中信息
@@ -25,3 +26,4 @@ export interface ResTrans{
     selectStart: number;
     selectEnd: number;
 }
+

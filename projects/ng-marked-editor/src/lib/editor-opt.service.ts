@@ -1,7 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import * as prettier from 'prettier';
 import * as plugins from 'prettier/parser-markdown';
-import { MdSelection, ResTrans } from '../types/editor';
+import { MdSelection, ResTrans } from './types/editor';
 import { lctDefaultValue } from './data';
 @Injectable()
 export class EditorOptService {

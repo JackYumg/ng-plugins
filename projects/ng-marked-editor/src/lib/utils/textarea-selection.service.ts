@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MdSelection } from '../../types/editor';
+import { MdSelection } from '../types/editor';
 
 @Injectable({
   providedIn: 'root'

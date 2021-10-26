@@ -1,7 +1,6 @@
-import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
-import { NgMarkedEditorOption } from '../types/editor';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { fromEvent } from 'rxjs';
+import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
 import { EditorStorageService } from './editor-storage.service';
@@ -76,8 +75,6 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private elm: ElementRef,
     private mdModalService: MdModalService,
     private cdk: ChangeDetectorRef,
-    @Inject(DOCUMENT) private doc: Document,
-    private editorStorageService: EditorStorageService,
     private editorStateManageService: EditorStateManageService
   ) {
     this.editorState = this.editorOptService.state;
