@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { combineLatest, fromEvent } from 'rxjs';
+import { debounceTime, delay, throttleTime } from 'rxjs/operators';
 import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
@@ -42,18 +43,45 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  textareaRefValue?: ElementRef;
   @ViewChild('textareaTpl')
-  textareaRef?: ElementRef;
+  set textareaRef(e: ElementRef | undefined) {
+    this.textareaRefValue = e;
+    if (e) {
+      let keyQune: any[] = [];
+      const keydownEvent = fromEvent(this.textareaRefValue?.nativeElement, 'keydown');
+      const keyupEvent = fromEvent(this.textareaRefValue?.nativeElement, 'keyup');
+      keyupEvent.subscribe( (event) => {
+        keyQune.shift();
+        // console.log(keyQune);
+      });
+      combineLatest([keydownEvent]).subscribe(([a]) => {
+        (a as Event).returnValue = false;
+        if (keyQune.length === 1) {
+          keyQune.push(a);
+          (a as Event).stopPropagation();
+          (a as Event).preventDefault();
+          console.log(keyQune);
+        } else {
+          keyQune.push(a);
+        }
+      });
+    }
+  }
+
+  get textareaRef(): ElementRef | undefined {
+    return this.textareaRefValue;
+  }
 
   rootValue = '';
 
-  get hasHistory(): boolean{
+  get hasHistory(): boolean {
     return this.editorStateManageService.stateStacks.length > 0;
   }
 
   set value(value: string) {
     this.rootValue = value;
-    this.editorStateManageService.pushState({value});
+    this.editorStateManageService.pushState({ value });
   }
 
   get value(): string {
@@ -143,10 +171,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     fromEvent(this.elm.nativeElement, 'keydown').subscribe((e: KeyboardEvent | any) => {
       isPressed = true;
       eventStatk.push(e);
-      if(this.value !== this.textareaRef?.nativeElement.value) {
+      if (this.value !== this.textareaRef?.nativeElement.value) {
         this.value = this.textareaRef?.nativeElement.value;
         this.cdk.detectChanges();
-        this.editorStateManageService.pushState({value: this.value})
       }
     });
     fromEvent(this.elm.nativeElement, 'keyup').subscribe((e: KeyboardEvent | any) => {
