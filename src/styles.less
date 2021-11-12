@@ -7,29 +7,8 @@
 @import "~ng-zorro-antd/tabs/style/index.min.css";
 @import "./../node_modules/highlightjs/styles/atom-one-light.css";
 @import '~@angular/cdk/overlay-prebuilt.css';
-@import "./../projects/ng-editor-markdown/src/theme/default.less";
-@import "./../projects/ng-editor-markdown/src/theme/index.less";
+@import "./../projects/ng-marked-preview/src/styles/theme/default.less";
+@import "./../projects/ng-marked-preview/src/styles/theme/index.less";
 /* You can add global styles to this file, and also import other style files */
 
-.default-modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .45);
-}
-
-.modal-wrap {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: auto;
-    outline: 0;
-    -webkit-overflow-scrolling: touch;
-    z-index: 1000;
-}
+@import './../projects/ng-marked-editor//src/styles/modal/index.less';
