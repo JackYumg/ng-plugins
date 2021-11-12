@@ -51,9 +51,9 @@ export class ToolBarComponent implements OnInit, OnDestroy {
   ];
 
   optGroup = [
-    { name: '#icon-revoke', title: '撤销' ,disabled : 'icon-Revoke'},
-    { name: '#icon-next' , title: '回滚'},
-    { name: '#icon-baocun' },
+    { name: '#icon-revoke', title: '撤销', disabled: 'icon-Revoke' },
+    { name: '#icon-next', title: '回滚' },
+    { name: '#icon-baocun', title: '保存' },
   ];
 
   rightGroup = [

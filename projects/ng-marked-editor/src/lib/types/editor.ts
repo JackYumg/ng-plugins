@@ -7,7 +7,6 @@ export interface NgMarkedEditorOption {
     saveOption: SaveOption;
 }
 
-
 // 工具栏图标信息
 export interface ToolItem {
     name: string;

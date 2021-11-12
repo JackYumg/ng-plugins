@@ -10,6 +10,7 @@ import { LinkUploadComponent } from './link-upload/link-upload.component';
 import { MdModalService } from './md-modal/md-modal.service';
 import { NgMarkedEditorService } from './ng-marked-editor.service';
 import { TextareaSelectionService } from './utils/textarea-selection.service';
+import { MainModalService } from './main-modal/main-modal.service';
 
 @Component({
   selector: 'lib-ng-marked-editor',
@@ -22,7 +23,8 @@ import { TextareaSelectionService } from './utils/textarea-selection.service';
   providers: [
     EditorOptService,
     EditorStateManageService,
-    EditorStorageService
+    EditorStorageService,
+    MainModalService
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -31,62 +33,16 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   option: NgMarkedEditorOption = {
     saveOption: {
       autoSave: false,
-    }
+    },
   };
 
+  private appKey = '';
+
+
   ngMarkedEditorRefValue?: ElementRef;
-  @ViewChild('ngMarkedEditorTpl')
-  set ngMarkedEditorRef(elm: ElementRef) {
-    if (elm) {
-      this.ngMarkedEditorRefValue = elm;
-      this.editorOptService.setElm(elm);
-    }
-  }
-
   textareaRefValue?: ElementRef;
-  @ViewChild('textareaTpl')
-  set textareaRef(e: ElementRef | undefined) {
-    this.textareaRefValue = e;
-    if (e) {
-      let keyQune: any[] = [];
-      const keydownEvent = fromEvent(this.textareaRefValue?.nativeElement, 'keydown');
-      const keyupEvent = fromEvent(this.textareaRefValue?.nativeElement, 'keyup');
-      keyupEvent.subscribe( (event) => {
-        keyQune.shift();
-        // console.log(keyQune);
-      });
-      combineLatest([keydownEvent]).subscribe(([a]) => {
-        (a as Event).returnValue = false;
-        if (keyQune.length === 1) {
-          keyQune.push(a);
-          (a as Event).stopPropagation();
-          (a as Event).preventDefault();
-          console.log(keyQune);
-        } else {
-          keyQune.push(a);
-        }
-      });
-    }
-  }
-
-  get textareaRef(): ElementRef | undefined {
-    return this.textareaRefValue;
-  }
 
   rootValue = '';
-
-  get hasHistory(): boolean {
-    return this.editorStateManageService.stateStacks.length > 0;
-  }
-
-  set value(value: string) {
-    this.rootValue = value;
-    this.editorStateManageService.pushState({ value });
-  }
-
-  get value(): string {
-    return this.rootValue;
-  }
 
   editorState = {
     zoom: false,
@@ -96,6 +52,47 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   };
 
   domText = '';
+
+  @ViewChild('ngMarkedEditorTpl')
+  set ngMarkedEditorRef(elm: ElementRef) {
+    if (elm) {
+      this.ngMarkedEditorRefValue = elm;
+      this.editorOptService.setElm(elm);
+    }
+  }
+
+  @ViewChild('textareaTpl')
+  set textareaRef(e: ElementRef | undefined) {
+    this.textareaRefValue = e;
+  }
+
+  get textareaRef(): ElementRef | undefined {
+    return this.textareaRefValue;
+  }
+  getAppkey(): string {
+    return this.appKey;
+  }
+
+  public setAppKey(appkey: string): void {
+    this.appKey = appkey;
+  }
+
+  get hasHistory(): boolean {
+    return this.editorStateManageService.stateStacks.length > 0;
+  }
+
+  set value(value: string) {
+    this.rootValue = value;
+    this.editorStateManageService.pushState({ value });
+    this.editorStorageService.saveEvent.emit(value);
+  }
+
+  get value(): string {
+    return this.rootValue;
+  }
+
+
+
   constructor(
     private ngMarkedEditorService: NgMarkedEditorService,
     private textareaSelectionService: TextareaSelectionService,
@@ -103,7 +100,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private elm: ElementRef,
     private mdModalService: MdModalService,
     private cdk: ChangeDetectorRef,
-    private editorStateManageService: EditorStateManageService
+    private editorStateManageService: EditorStateManageService,
+    private mainModalService: MainModalService,
+    private editorStorageService: EditorStorageService
   ) {
     this.editorState = this.editorOptService.state;
   }
@@ -111,6 +110,8 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeKeyboadeEvent();
     this.subscribeModalEvent();
+    this.createAppKey();
+    this.autoSaveConfig();
   }
   // 点击工具条按钮时的响应方法
   toolbarClick($event: any): void {
@@ -157,10 +158,21 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
       }
     } else if (type === 'modal') {// 如果是弹出框
       if (name === 'image') {
-        this.mdModalService.create(ImageUploadComponent);
+        const ref = this.mainModalService.create({
+          content: ImageUploadComponent,
+          modalParams: {
+            title: '10086'
+          }
+        });
+
+        ref.afterClose.subscribe((e) => {
+          console.log(e);
+        });
       } else if (name === 'link') {
         this.mdModalService.create(LinkUploadComponent);
       }
+    } else if (name === 'baocun') {
+      this.editorStorageService.saveImidet(this.value);
     }
   }
 
@@ -193,14 +205,35 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
         this.value = res.value;
         this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         this.cdk.detectChanges();
+        this.mainModalService.closeAll();
+      } else if (type === 'cancel') {
+        this.mainModalService.closeAll();
       }
     });
+  }
+
+  // 判断是否启动存储功能
+  autoSaveConfig(): void {
+    if (this.option.saveOption.autoSave) {
+      this.editorStorageService.loadConfig(this.appKey).then((res) => {
+        if (res) {
+          this.editorStorageService.start();
+        }
+      });
+    }
   }
 
   previewValueChange(event: string): void {
     this.domText = event.replace(new RegExp('<span class="code-copy">复制代码</span>', 'g'), '');
   }
 
+  // 创建APPID
+  createAppKey(): void {
+    const key = Date.now() * Math.random() * 10000;
+    this.setAppKey(key.toString());
+  }
+
   ngOnDestroy(): void {
+    this.editorStorageService.destory();
   }
 }

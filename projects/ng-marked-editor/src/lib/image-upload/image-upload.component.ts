@@ -50,11 +50,10 @@ export class ImageUploadComponent implements OnInit {
 
   confirm(): void {
     this.ngMarkedEditorService.fileUploadEvent.emit({ path: this.url, desc: this.desc, type: 'image' });
-    this.modalService.closeAll();
   }
 
   cancel(): void {
-    this.modalService.closeAll();
+    this.ngMarkedEditorService.fileUploadEvent.emit({ type: 'cancel' });
   }
 
   activeTab(type: OptType): void {

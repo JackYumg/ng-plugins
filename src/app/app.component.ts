@@ -9,7 +9,6 @@ export class AppComponent implements OnInit {
   data = 0;
   title = '1212';
   constructor(
-    private cdk: ChangeDetectorRef
   ) {
 
   }

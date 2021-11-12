@@ -1,0 +1,16 @@
+<div #modalElement role="document" class="modal" (mousedown)="onMousedown()" [ngClass]="config.className!"
+    [style]="config.maskStyle" [style.width]="config?.width">
+    <div class="modal-content">
+        <button *ngIf="config.closable" nz-modal-close></button>
+        <div *ngIf="config.title" nz-modal-title></div>
+        <div class="modal-body" [style]="config.bodyStyle!">
+            <ng-template cdkPortalOutlet></ng-template>
+            <div *ngIf="isStringContent" [innerHTML]="config.content"></div>
+        </div>
+        <!-- <div lib-main-modal-footer *ngIf="config.footer !== null" [modalRef]="modalRef"  
+        (cancelTriggered)="onCloseClick()"
+        (okTriggered)="onOkClick()">
+
+        </div> -->
+    </div>
+</div>
