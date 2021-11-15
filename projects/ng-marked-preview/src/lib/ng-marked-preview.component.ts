@@ -7,6 +7,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { MarkBaseService } from '../service/mark-base.service';
 import { NgMarkedPreviewService } from './ng-marked-preview.service';
+
+type ThemeType = 'default' | 'dark';
 @Component({
   selector: 'lib-ng-marked-preview',
   template: `
@@ -34,7 +36,7 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
   clickEvent?: Subscription;
 
   @Input()
-  theme = 'dark';
+  theme: ThemeType = 'default';
 
   constructor(
     private cdk: ChangeDetectorRef,

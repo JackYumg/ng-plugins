@@ -1,16 +1,14 @@
 <div class="page">
     <h1 nz-typography>Markdown编辑器</h1>
     <app-sand-box [fileList]="[]">
+        <h2>主题切换</h2>
+        <p>
+            <a (click)="switchTheme('default')">默认</a>
+            /
+            <a (click)="switchTheme('dark')">暗黑</a>
+        </p>
         <div class="demo">
-            <lib-ng-marked-editor [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
-        </div>
-    </app-sand-box>
-</div>
-<div class="page">
-    <h1 nz-typography>Markdown编辑器</h1>
-    <app-sand-box [fileList]="[]">
-        <div class="demo">
-            <lib-ng-marked-editor *ngIf="fg" [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
+            <lib-ng-marked-editor [theme]="theme" [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
         </div>
     </app-sand-box>
 </div>

@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgMarkedEditorOption } from 'projects/ng-marked-editor/src/lib/types/editor';
+import { ThemeType } from 'projects/ng-marked-editor/src/public-api';
 import { HttpService } from 'src/app/shared/service/http.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { HttpService } from 'src/app/shared/service/http.service';
 })
 export class NgMarkedEditorComponent implements OnInit {
 
+  theme: ThemeType = 'default';
   option: NgMarkedEditorOption = {
     saveOption: {
       autoSave: true
@@ -42,5 +44,9 @@ export class NgMarkedEditorComponent implements OnInit {
       });
       this.cdk.detectChanges();
     });
+  }
+
+  switchTheme(theme: ThemeType): void {
+    this.theme = theme;
   }
 }

@@ -23,6 +23,7 @@ export let MarkedEditorAccessor: any = {
   multi: true
 };
 
+export type ThemeType = 'default' | 'dark';
 
 @Component({
   selector: 'lib-ng-marked-editor',
@@ -73,6 +74,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
   // 表单属性
   disabled = false;
 
+  // 主题
+  @Input()
+  theme: ThemeType = 'default';
   @ViewChild('ngMarkedEditorTpl')
   set ngMarkedEditorRef(elm: ElementRef) {
     if (elm) {
