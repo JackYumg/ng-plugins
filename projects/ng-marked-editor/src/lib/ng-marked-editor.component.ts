@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { combineLatest, concat, forkJoin, fromEvent } from 'rxjs';
-import { audit, debounceTime, delay, filter, find, takeUntil, throttleTime } from 'rxjs/operators';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component,
+  ElementRef, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, ViewChild
+} from '@angular/core';
+import { fromEvent } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
@@ -11,6 +14,15 @@ import { MdModalService } from './md-modal/md-modal.service';
 import { NgMarkedEditorService } from './ng-marked-editor.service';
 import { TextareaSelectionService } from './utils/textarea-selection.service';
 import { MainModalService } from './main-modal/main-modal.service';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+export let MarkedEditorAccessor: any = {
+  provide: NG_VALUE_ACCESSOR,
+  // tslint:disable-next-line: no-use-before-declare
+  useExisting: forwardRef(() => NgMarkedEditorComponent),
+  multi: true
+};
+
 
 @Component({
   selector: 'lib-ng-marked-editor',
@@ -24,17 +36,22 @@ import { MainModalService } from './main-modal/main-modal.service';
     EditorOptService,
     EditorStateManageService,
     EditorStorageService,
-    MainModalService
+    MainModalService,
+    MarkedEditorAccessor
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgMarkedEditorComponent implements OnInit, OnDestroy {
+export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @Input()
   option: NgMarkedEditorOption = {
     saveOption: {
       autoSave: false,
     },
   };
+
+  // 点击保存时向外面抛出事件
+  @Output()
+  saveChange = new EventEmitter<string>();
 
   private appKey = '';
   // 服务实列传递给子组件使用
@@ -52,6 +69,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   };
 
   domText = '';
+
+  // 表单属性
+  disabled = false;
 
   @ViewChild('ngMarkedEditorTpl')
   set ngMarkedEditorRef(elm: ElementRef) {
@@ -84,6 +104,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     return this.editorStateManageService.stateStacks.length > 0;
   }
 
+  @Input()
   set value(value: string) {
     this.rootValue = value;
     this.editorStorageService.saveEvent.emit(value);
@@ -98,7 +119,6 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private ngMarkedEditorService: NgMarkedEditorService,
     private textareaSelectionService: TextareaSelectionService,
     private editorOptService: EditorOptService,
-    private elm: ElementRef,
     private mdModalService: MdModalService,
     private cdk: ChangeDetectorRef,
     private editorStateManageService: EditorStateManageService,
@@ -174,6 +194,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
       }
     } else if (name === 'baocun') {
       this.editorStorageService.saveImidet(this.value);
+      this.saveChange.emit(this.value);
     } else if (name === 'revoke') {
       const state = this.editorStateManageService.rollback();
       if (state) {
@@ -304,4 +325,23 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.editorStorageService.destory();
   }
+
+  writeValue(obj: any): void {
+    this.value = obj;
+    this.cdk.detectChanges();
+  }
+  registerOnChange(fn: any): void {
+    this.propsChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.propsTouched = fn;
+  }
+
+  propsChange = (_: any) => {};
+  propsTouched = (_: any) => {};
+  setDisabledState(disabled: boolean): void {
+    this.disabled = disabled;
+    this.cdk.detectChanges();
+  }
+
 }

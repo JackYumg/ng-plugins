@@ -31,7 +31,6 @@ export class EditorStateManageService {
       const item = this.stateStacks.pop() || { value: '' };
       this.yStacks.push(item);
       this.editorState = this.stateStacks[this.stateStacks.length - 1] || {};
-      console.log(this.stateStacks);
       return this.editorState;
     }
     return null;
@@ -48,23 +47,27 @@ export class EditorStateManageService {
     }
   }
 
+  // 清除
   clear(): void {
     this.stateStacks = [];
   }
-
+  // 清除
   clearY(): void {
     this.yStacks = [];
   }
 
+  // 判断是否可以撤销
   hasPre(): boolean {
     return this.stateStacks.length > 0;
   }
 
+  // 判断是否可以回滚
   hasNext(): boolean {
     return this.yStacks.length > 0;
   }
 
-  // 判断是否为可输入文本
+  // 判断是否为可输入文本（）
+  // ts-dsiabled
   isInputText(iKey: number): boolean {
     if (iKey === 32 || iKey === 229) {
       return true;

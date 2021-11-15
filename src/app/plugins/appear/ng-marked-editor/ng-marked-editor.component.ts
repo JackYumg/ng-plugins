@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgMarkedEditorOption } from 'projects/ng-marked-editor/src/lib/types/editor';
 
 @Component({
@@ -13,9 +14,20 @@ export class NgMarkedEditorComponent implements OnInit {
       autoSave: true
     }
   };
-  constructor() { }
+  fg: FormGroup;
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.fg = this.fb.group({
+      text: '# dddd'
+    });
+  }
 
   ngOnInit(): void {
+  }
+
+  saveChange(value: string): void {
+    console.log(value);
   }
 
 }

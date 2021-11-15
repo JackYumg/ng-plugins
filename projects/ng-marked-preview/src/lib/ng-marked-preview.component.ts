@@ -47,7 +47,7 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const e = this.markBaseService.toHtml(this.context);
+    const e = this.markBaseService.toHtml(this.context || '');
     this.previewText = this.sanitizer.bypassSecurityTrustHtml(e);
     this.valueChange.emit(e);
   }
