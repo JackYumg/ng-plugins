@@ -2,7 +2,7 @@
     <h1 nz-typography>Markdown编辑器</h1>
     <app-sand-box [fileList]="[]">
         <div class="demo">
-            <lib-ng-marked-editor (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
+            <lib-ng-marked-editor [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
         </div>
     </app-sand-box>
 </div>

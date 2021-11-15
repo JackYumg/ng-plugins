@@ -10,7 +10,7 @@ import { NgMarkedPreviewService } from './ng-marked-preview.service';
 @Component({
   selector: 'lib-ng-marked-preview',
   template: `
-    <div class="ng-editor-md-workspace-display" #rootElm [innerHtml]="previewText"></div>
+    <div class="ng-editor-md-workspace-display" [class.default]="theme === 'default' || !theme" [class.dark]="theme === 'dark' || !theme" #rootElm [innerHtml]="previewText"></div>
   `,
   styles: [
   ],
@@ -32,6 +32,10 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   previewText?: SafeHtml;
   clickEvent?: Subscription;
+
+  @Input()
+  theme = 'dark';
+
   constructor(
     private cdk: ChangeDetectorRef,
     private markBaseService: MarkBaseService,

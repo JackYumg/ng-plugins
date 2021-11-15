@@ -1,0 +1,17 @@
+
+
+.themeMixin(@rules) {
+    @import './../../../../../node_modules/highlight.js/styles/atom-one-dark.css';
+    .ng-editor-md-workspace-display{
+        padding: 0.8em;
+        &.default{
+            @rules();
+        }
+
+        &.dark{
+            background: @theme-color;
+            color: @color;
+            @rules();
+        }
+    }
+}
