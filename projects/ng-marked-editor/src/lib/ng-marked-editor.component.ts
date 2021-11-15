@@ -219,11 +219,10 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
       'KeyS'
     ];
     let isPressed = false;
-    const key3Event = fromEvent(this.textareaRef?.nativeElement, 'keyup').subscribe((e: any) => {
+    fromEvent(this.textareaRef?.nativeElement, 'keyup').subscribe((e: any) => {
       if (e.code === 'ControlLeft') {
         keyStack = [];
         isPressed = false;
-        console.log('松开了');
       }
     });
 

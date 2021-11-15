@@ -63,7 +63,6 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
         input.select();
         if (document.execCommand) {
           const e = document.execCommand('copy');
-          console.log(e);
           event.target.innerText = '复制成功';
           let timers: any = 0;
           if (timers) {

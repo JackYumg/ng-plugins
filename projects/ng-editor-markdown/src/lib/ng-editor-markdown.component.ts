@@ -263,7 +263,6 @@ export class NgEditorMarkdownComponent implements OnChanges, OnDestroy, ControlV
       }
       count++;
     }
-    console.log(lineCount);
     if (!selected) {
       const res = this.value?.substring(0, pos) + '#'.repeat(value) + ' 标题' + this.value?.substring(35);
       return [pos + '#'.repeat(value).length + 1, pos + '#'.repeat(value).length + 3];
