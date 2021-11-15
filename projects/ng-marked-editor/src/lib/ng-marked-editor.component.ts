@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { combineLatest, fromEvent } from 'rxjs';
-import { debounceTime, delay, throttleTime } from 'rxjs/operators';
+import { combineLatest, concat, forkJoin, fromEvent } from 'rxjs';
+import { audit, debounceTime, delay, filter, find, takeUntil, throttleTime } from 'rxjs/operators';
 import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
 import { EditorStateManageService } from './editor-state-manage.service';
@@ -37,8 +37,8 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   };
 
   private appKey = '';
-
-
+  // 服务实列传递给子组件使用
+  editorStateManageInstance?: EditorStateManageService;
   ngMarkedEditorRefValue?: ElementRef;
   textareaRefValue?: ElementRef;
 
@@ -64,6 +64,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
   @ViewChild('textareaTpl')
   set textareaRef(e: ElementRef | undefined) {
     this.textareaRefValue = e;
+    if (e) {
+      this.subscribeKeyboadeEvent();
+    }
   }
 
   get textareaRef(): ElementRef | undefined {
@@ -83,14 +86,12 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
 
   set value(value: string) {
     this.rootValue = value;
-    this.editorStateManageService.pushState({ value });
     this.editorStorageService.saveEvent.emit(value);
   }
 
   get value(): string {
     return this.rootValue;
   }
-
 
 
   constructor(
@@ -105,10 +106,10 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
     private editorStorageService: EditorStorageService
   ) {
     this.editorState = this.editorOptService.state;
+    this.editorStateManageInstance = editorStateManageService;
   }
 
   ngOnInit(): void {
-    this.subscribeKeyboadeEvent();
     this.subscribeModalEvent();
     this.createAppKey();
     this.autoSaveConfig();
@@ -173,25 +174,92 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy {
       }
     } else if (name === 'baocun') {
       this.editorStorageService.saveImidet(this.value);
+    } else if (name === 'revoke') {
+      const state = this.editorStateManageService.rollback();
+      if (state) {
+        this.value = state.value || '';
+      }
+      this.editorStateManageService.toolEvent.emit(true);
+    } else if (name === 'next') {
+      const state = this.editorStateManageService.rollInvoke();
+      if (state) {
+        this.value = state.value || '';
+      }
+      this.editorStateManageService.toolEvent.emit(true);
     }
   }
 
   // 订阅键盘的事件
   subscribeKeyboadeEvent(): void {
+    let keyStack: any[] = [];
+    const keyBoardKeys = [
+      'KeyY',
+      'KeyZ',
+      'KeyS'
+    ];
     let isPressed = false;
-    let eventStatk = [];
-    fromEvent(this.elm.nativeElement, 'keydown').subscribe((e: KeyboardEvent | any) => {
-      isPressed = true;
-      eventStatk.push(e);
-      if (this.value !== this.textareaRef?.nativeElement.value) {
-        this.value = this.textareaRef?.nativeElement.value;
-        this.cdk.detectChanges();
+    const key3Event = fromEvent(this.textareaRef?.nativeElement, 'keyup').subscribe((e: any) => {
+      if (e.code === 'ControlLeft') {
+        keyStack = [];
+        isPressed = false;
+        console.log('松开了');
       }
     });
-    fromEvent(this.elm.nativeElement, 'keyup').subscribe((e: KeyboardEvent | any) => {
-      e.preventDefault();
-      isPressed = false;
-      eventStatk = [];
+
+
+    const key1Event = fromEvent(this.textareaRef?.nativeElement, 'keydown').pipe(filter((e: any) => {
+      const isCtrl = e.code === 'ControlLeft';
+      if (isCtrl) {
+        keyStack = [];
+        keyStack.push(e);
+        isPressed = true;
+        return false;
+      }
+
+      const finded = keyBoardKeys.findIndex(key => key === e.code) >= 0;
+      if (finded && isPressed) {
+        if (keyStack.length >= 1) {
+          keyStack[1] = e;
+          e.returnValue = false;
+          return true;
+        } else {
+          keyStack.push(e);
+          e.returnValue = false;
+          return true;
+        }
+      }
+      return true;
+    }));
+    key1Event.subscribe((e) => {
+      if (e.code === 'KeyZ') {
+        const state = this.editorStateManageService.rollback();
+        if (state) {
+          this.value = state.value || '';
+        }
+      } else if (e.code === 'KeyS') {
+        e.returnValue = false;
+        this.editorStorageService.saveImidet(this.value);
+      } else if (e.code === 'KeyY') {
+        const state = this.editorStateManageService.rollInvoke();
+        if (state) {
+          this.value = state.value || '';
+        }
+      } else {
+        this.editorStateManageService.pushState({
+          value: this.value
+        });
+        this.editorStateManageService.clearY();
+      }
+      this.editorStateManageService.toolEvent.emit(true);
+      this.cdk.detectChanges();
+    });
+
+  }
+
+  // 订阅文本输入事件
+  textValueChange($event: any): void {
+    this.editorStateManageService.pushState({
+      value: $event
     });
   }
 

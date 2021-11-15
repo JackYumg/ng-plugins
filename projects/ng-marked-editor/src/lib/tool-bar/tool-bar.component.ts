@@ -3,6 +3,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { MdModalComponent } from '../md-modal/md-modal.component';
+import { EditorStateManageService } from '../editor-state-manage.service';
 @Component({
   selector: 'lib-tool-bar',
   templateUrl: './tool-bar.component.html',
@@ -20,6 +21,8 @@ export class ToolBarComponent implements OnInit, OnDestroy {
   @Input()
   hasFurtrue = false; // 是否有下一步
 
+  @Input()
+  stateInstance?: EditorStateManageService;
   baseGroup1 = [
     { name: '#icon-bold', title: '加粗', type: 'insert' },
     { name: '#icon-underline', title: '下划线', type: 'insert' },
@@ -49,11 +52,10 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     { name: '#icon-liuchengtu', title: '流程图', show: false, type: 'insert' },
     { name: '#icon-gongshi', show: false, title: '公式', type: 'insert' }
   ];
-
   optGroup = [
-    { name: '#icon-revoke', title: '撤销', disabled: 'icon-Revoke' },
-    { name: '#icon-next', title: '回滚' },
-    { name: '#icon-baocun', title: '保存' },
+    { name: '#icon-revoke', title: '撤销', disabledIcon: '#icon-invock-disable', disabled: false },
+    { name: '#icon-next', title: '回滚', disabled: false, disabledIcon: '#icon-next-disable' },
+    { name: '#icon-baocun', title: '保存', disabled: false },
   ];
 
   rightGroup = [
@@ -90,6 +92,11 @@ export class ToolBarComponent implements OnInit, OnDestroy {
         e.preventDefault();
         this.itemClick(this.rightGroup[2]);
       }
+    });
+
+    this.initInvockOrNextState();
+    this.stateInstance?.toolEvent.subscribe( () => {
+      this.initInvockOrNextState();
     });
   }
 
@@ -131,11 +138,21 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     ref.attach(modal);
   }
 
+  // 初始化时获取操作按钮状态
+  initInvockOrNextState(): void {
+    const hasPre = this.stateInstance?.hasPre();
+    const hasNext = this.stateInstance?.hasNext();
+    this.optGroup[0].disabled = !hasPre;
+    this.optGroup[1].disabled = !hasNext;
+    this.cdk.detectChanges();
+  }
 
   ngOnDestroy(): void {
     if (this.clickWindowEvent) {
       this.clickWindowEvent.unsubscribe();
     }
   }
+
+
 
 }

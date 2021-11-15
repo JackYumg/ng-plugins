@@ -41,7 +41,19 @@
                         background: gainsboro;
                     }
                 }
+
+                &.disabled {
+                    pointer-events: none;
+                    svg{
+                        &:hover{
+                            background: transparent;
+                            cursor: not-allowed;
+                        }
+                    }
+                }
             }
+
+            
         }
     }
 

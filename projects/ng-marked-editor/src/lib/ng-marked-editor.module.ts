@@ -5,7 +5,6 @@ import { NgMarkedEditorComponent } from './ng-marked-editor.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { PortalModule} from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { MenuDirective } from './menu.directive';
 import { MdModalComponent } from './md-modal/md-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { LinkUploadComponent } from './link-upload/link-upload.component';
@@ -17,7 +16,6 @@ import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api
   declarations: [
     NgMarkedEditorComponent,
     ToolBarComponent,
-    MenuDirective,
     MdModalComponent,
     ImageUploadComponent,
     LinkUploadComponent,
