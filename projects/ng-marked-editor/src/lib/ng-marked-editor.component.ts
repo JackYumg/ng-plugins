@@ -272,7 +272,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         this.editorStateManageService.pushState({
           value: this.value
         });
-        this.editorStateManageService.clearY();
+        if (this.editorStateManageService.isInputText(e.keycode)) {
+          this.editorStateManageService.clearY();
+        }
       }
       this.editorStateManageService.toolEvent.emit(true);
       this.cdk.detectChanges();
@@ -340,8 +342,8 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
     this.propsTouched = fn;
   }
 
-  propsChange = (_: any) => {};
-  propsTouched = (_: any) => {};
+  propsChange = (_: any) => { };
+  propsTouched = (_: any) => { };
   setDisabledState(disabled: boolean): void {
     this.disabled = disabled;
     this.cdk.detectChanges();

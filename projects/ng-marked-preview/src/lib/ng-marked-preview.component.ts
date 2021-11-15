@@ -33,6 +33,7 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
   valueChange: EventEmitter<string> = new EventEmitter<string>();
 
   previewText?: SafeHtml;
+  // 订阅的点击事件
   clickEvent?: Subscription;
 
   @Input()
