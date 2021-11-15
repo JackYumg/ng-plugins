@@ -12,7 +12,7 @@ type ThemeType = 'default' | 'dark';
 @Component({
   selector: 'lib-ng-marked-preview',
   template: `
-    <div class="ng-editor-md-workspace-display" [class.default]="theme === 'default' || !theme" [class.dark]="theme === 'dark' || !theme" #rootElm [innerHtml]="previewText"></div>
+    <div class="ng-editor-md-workspace-display" [hidden]="!previewText" [class.default]="theme === 'default' || !theme" [class.dark]="theme === 'dark' || !theme" #rootElm [innerHtml]="previewText"></div>
   `,
   styles: [
   ],
