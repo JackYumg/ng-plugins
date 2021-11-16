@@ -81,6 +81,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
   scrollH = 0;
   isjsScroll = false; // 判断非用户行为滚动
   jsScrollTime: any;
+  tempTIme: any;
   @ViewChild('ngMarkedEditorTpl')
   set ngMarkedEditorRef(elm: ElementRef) {
     if (elm) {
@@ -232,6 +233,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
     }
   }
 
+
   // 订阅键盘的事件
   subscribeKeyboadeEvent(): void {
     let keyStack: any[] = [];
@@ -266,7 +268,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
           return true;
         } else {
           keyStack.push(e);
-          e.returnValue = false;
+          e.returnValue = true;
           return true;
         }
       }
@@ -286,6 +288,19 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         if (state) {
           this.value = state.value || '';
         }
+      } else if (e.code === 'KeyV' && isPressed) {
+        if (this.tempTIme) {
+          clearTimeout(this.tempTIme);
+        }
+        this.tempTIme = setTimeout(() => {
+          const state: any = this.editorStateManageService.pushState({
+            value: this.value
+          });
+          this.editorStateManageService.toolEvent.emit(true);
+          if (state) {
+            this.value = state.value || '';
+          }
+        }, 0);
       } else {
         this.editorStateManageService.pushState({
           value: this.value
@@ -389,6 +404,10 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
 
   writeValue(obj: any): void {
     this.value = obj;
+    const state: any = this.editorStateManageService.pushState({
+      value: this.value
+    });
+    this.editorStateManageService.toolEvent.emit(true);
     this.cdk.detectChanges();
   }
   registerOnChange(fn: any): void {
