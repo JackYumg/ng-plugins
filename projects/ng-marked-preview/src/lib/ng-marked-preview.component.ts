@@ -38,7 +38,10 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   theme: ThemeType = 'default';
-
+  @Input()
+  scrollH = 0;
+  isjsScroll = false; // 判断非用户行为滚动
+  jsScrollTime: any;
   constructor(
     private cdk: ChangeDetectorRef,
     private markBaseService: MarkBaseService,
@@ -57,6 +60,26 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
     const e = this.markBaseService.toHtml(this.context || '');
     this.previewText = this.sanitizer.bypassSecurityTrustHtml(e);
     this.valueChange.emit(e);
+    if (changes.scrollH && changes.scrollH.currentValue) {
+      this.scrollTo(this.scrollH);
+      this.isjsScroll = true;
+      if (this.jsScrollTime) {
+        clearTimeout(this.jsScrollTime);
+      }
+      this.jsScrollTime = setTimeout(() => {
+        this.isjsScroll = false;
+      }, 100);
+    } else {
+      this.scrollH = 0;
+    }
+  }
+
+  // 预览框可以滚动
+  scrollTo(h: any): void {
+    const target = this.elm.nativeElement;
+    const t1 = target.scrollHeight - target.clientHeight;
+    this.elm.nativeElement.scrollTop = h * t1;
+    this.cdk.detectChanges();
   }
 
   // 订阅事件
@@ -84,7 +107,9 @@ export class NgMarkedPreviewComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     fromEvent(this.elm.nativeElement, 'scroll').subscribe((event: Event | any) => {
-      this.scrollEvent.emit(event);
+      if (!this.isjsScroll) {
+        this.scrollEvent.emit(event);
+      }
     });
 
   }

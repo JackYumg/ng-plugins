@@ -4,7 +4,7 @@
         <textarea [disabled]="disabled" #textareaTpl [(ngModel)]="value"  class="md-editor-textarea" rows="16"></textarea>
         <ng-container>
             <div class="md-editor-divider" [class.hidden]="!editorState.preview || editorState.code"></div>
-            <lib-ng-marked-preview [theme]="theme?theme: 'default'" class="md-editor-preview" (valueChange)="previewValueChange($event)" [class.hidden]="!editorState.preview || editorState.code" [context]="value"></lib-ng-marked-preview>
+            <lib-ng-marked-preview [scrollH]="scrollH" (scrollEvent)="scrollEvent($event)" [theme]="theme?theme: 'default'" class="md-editor-preview" (valueChange)="previewValueChange($event)" [class.hidden]="!editorState.preview || editorState.code" [context]="value"></lib-ng-marked-preview>
         </ng-container>
         <ng-container>
             <div class="md-editor-divider" [class.hidden]="!editorState.code"></div>

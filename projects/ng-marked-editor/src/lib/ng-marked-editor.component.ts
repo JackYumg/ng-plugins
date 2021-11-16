@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component,
   ElementRef, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { fromEvent, fromEventPattern } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
@@ -15,6 +15,7 @@ import { NgMarkedEditorService } from './ng-marked-editor.service';
 import { TextareaSelectionService } from './utils/textarea-selection.service';
 import { MainModalService } from './main-modal/main-modal.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 export let MarkedEditorAccessor: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -77,6 +78,9 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
   // 主题
   @Input()
   theme: ThemeType = 'default';
+  scrollH = 0;
+  isjsScroll = false; // 判断非用户行为滚动
+  jsScrollTime: any;
   @ViewChild('ngMarkedEditorTpl')
   set ngMarkedEditorRef(elm: ElementRef) {
     if (elm) {
@@ -90,6 +94,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
     this.textareaRefValue = e;
     if (e) {
       this.subscribeKeyboadeEvent();
+      this.initTextareaEvent();
     }
   }
 
@@ -325,6 +330,44 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
   createAppKey(): void {
     const key = Date.now() * Math.random() * 10000;
     this.setAppKey(key.toString());
+  }
+
+  // 预览框滚动事件
+  scrollEvent($event: any): void {
+    this.isjsScroll = true;
+    const { target } = $event;
+    const t1 = target.scrollHeight - target.clientHeight;
+    const h: any = target.scrollTop / t1 * (this.textareaRef?.nativeElement.scrollHeight - this.textareaRef?.nativeElement.clientHeight);
+    (this.textareaRef?.nativeElement as any).scrollTop = h;
+    if (this.jsScrollTime) {
+      clearTimeout(this.jsScrollTime);
+    }
+    this.jsScrollTime = setTimeout(() => {
+      this.isjsScroll = false;
+    }, 100);
+  }
+
+  // 监听文本框的滚动事件
+  initTextareaEvent(): void {
+    let subs: Subscription;
+    const addScrollEvent = (e: any) => {
+      subs = fromEvent(this.textareaRef?.nativeElement, 'scroll').pipe(filter(() => !this.isjsScroll)).subscribe((event: any) => {
+        const { target } = event;
+        const t1 = target.scrollHeight - target.clientHeight;
+        const h: any = target.scrollTop / t1;
+        this.scrollH = h;
+        this.cdk.detectChanges();
+      });
+    };
+
+    const removeScrollEvent = () => {
+      subs.unsubscribe();
+    };
+
+    fromEventPattern(addScrollEvent, removeScrollEvent).subscribe((e) => {
+      console.log(e);
+    });
+
   }
 
   ngOnDestroy(): void {
