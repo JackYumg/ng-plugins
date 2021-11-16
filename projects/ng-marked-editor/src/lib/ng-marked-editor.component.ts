@@ -260,15 +260,15 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
       return true;
     }));
     key1Event.subscribe((e) => {
-      if (e.code === 'KeyZ') {
+      if (e.code === 'KeyZ' && isPressed) {
         const state = this.editorStateManageService.rollback();
         if (state) {
           this.value = state.value || '';
         }
-      } else if (e.code === 'KeyS') {
+      } else if (e.code === 'KeyS' && isPressed) {
         e.returnValue = false;
         this.editorStorageService.saveImidet(this.value);
-      } else if (e.code === 'KeyY') {
+      } else if (e.code === 'KeyY' && isPressed) {
         const state = this.editorStateManageService.rollInvoke();
         if (state) {
           this.value = state.value || '';
