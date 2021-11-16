@@ -11,8 +11,8 @@ import { LinkUploadComponent } from './link-upload/link-upload.component';
 import { MainModalComponent } from './main-modal/main-modal.component';
 import { MainModalDirective } from './main-modal/main-modal.directive';
 import { MainModalFooterComponent } from './main-modal/main-modal-footer/main-modal-footer.component';
-import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 import { TranslatePipe } from './translate.pipe';
+import { NgMarkedPreviewModule } from 'ng-marked-preview';
 @NgModule({
   declarations: [
     NgMarkedEditorComponent,

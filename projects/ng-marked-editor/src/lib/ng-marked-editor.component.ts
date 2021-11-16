@@ -10,7 +10,6 @@ import { EditorStateManageService } from './editor-state-manage.service';
 import { EditorStorageService } from './editor-storage.service';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { LinkUploadComponent } from './link-upload/link-upload.component';
-import { MdModalService } from './md-modal/md-modal.service';
 import { NgMarkedEditorService } from './ng-marked-editor.service';
 import { TextareaSelectionService } from './utils/textarea-selection.service';
 import { MainModalService } from './main-modal/main-modal.service';
@@ -129,7 +128,6 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
     private ngMarkedEditorService: NgMarkedEditorService,
     private textareaSelectionService: TextareaSelectionService,
     private editorOptService: EditorOptService,
-    private mdModalService: MdModalService,
     private cdk: ChangeDetectorRef,
     private editorStateManageService: EditorStateManageService,
     private mainModalService: MainModalService,

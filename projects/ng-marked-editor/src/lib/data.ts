@@ -11,4 +11,4 @@ export const lctDefaultValue: {[key: string]: string} = {
 
 export const BaseConfig = {
     fileurl: 'http://118.195.182.168:8001/fileapi/'
-}
+};
