@@ -129,7 +129,7 @@
     <span class="divider" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'"></span>
     <ul class="icon-ul right">
         <li class="icon-ul-li" *ngFor="let i of optGroup">
-            <span class="icon-ul-li-icon" [class.disabled]="i.disabled">
+            <span class="icon-ul-li-icon" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'" [class.disabled]="i.disabled">
                 <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
                     <use [attr.xlink:href]="i.name"></use>
                 </svg>

@@ -40,7 +40,7 @@ export class NgMarkedEditorComponent implements OnInit {
   getData(): void {
     this.httpService.getText('assets\\example\\marked.md').subscribe((e: string) => {
       this.fg.patchValue({
-        text: e
+        text: ''
       });
       this.cdk.detectChanges();
     });

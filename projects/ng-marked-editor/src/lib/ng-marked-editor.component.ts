@@ -182,6 +182,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         this.editorStateManageService.pushState({
           value: this.value
         });
+        this.editorStateManageService.toolEvent.emit(true);
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
@@ -191,6 +192,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         this.editorStateManageService.pushState({
           value: this.value
         });
+        this.editorStateManageService.toolEvent.emit(true);
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
