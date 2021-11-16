@@ -170,18 +170,27 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
       const fnName = name.split('-').map(dealFunction).join('');
       if ((this.editorOptService as any)[fnName]) {
         this.value = (this.editorOptService as any)[fnName](this.value);
+        this.editorStateManageService.pushState({
+          value: this.value
+        });
       }
     } else if (type === 'insert') { // 能够直接插入的
       const section = this.textareaSelectionService.getSelection(this.textareaRef?.nativeElement);
       if (this.editorOptService[name as 'bold']) {
         const res = this.editorOptService[name as 'bold' | 'title'](this.value, section, value);
         this.value = res.value;
+        this.editorStateManageService.pushState({
+          value: this.value
+        });
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
       } else if (this.editorOptService[salis as 'bold']) {
         const res = this.editorOptService[salis as 'bold'](this.value, section);
         this.value = res.value;
+        this.editorStateManageService.pushState({
+          value: this.value
+        });
         setTimeout(() => {
           this.textareaSelectionService.textSelect(this.textareaRef?.nativeElement, res.selectStart, res.selectEnd);
         }, 1);
@@ -191,15 +200,17 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         const ref = this.mainModalService.create({
           content: ImageUploadComponent,
           modalParams: {
-            title: '10086'
+            title: '10086',
+            theme: this.theme
           }
         });
-
-        ref.afterClose.subscribe((e) => {
-          console.log(e);
-        });
       } else if (name === 'link') {
-        this.mdModalService.create(LinkUploadComponent);
+        this.mainModalService.create({
+          content: LinkUploadComponent,
+          modalParams: {
+            theme: this.theme
+          }
+        });
       }
     } else if (name === 'baocun') {
       this.editorStorageService.saveImidet(this.value);

@@ -1,4 +1,4 @@
-<div class="modal-container" [ngStyle]="defaultStyle">
+<div class="modal-container" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'" [ngStyle]="defaultStyle">
     <div class="modal-title">
         <h3>添加图片</h3>
     </div>
@@ -13,7 +13,7 @@
     <div class="modal-content">
         <div class="modal-content" *ngIf="optType === 'upload'">
             <div class="modal-content-upload">
-                <p>
+                <p style="position: relative;">
                     <input type="file" (change)="fileuploadChange($event)">
                 </p>
                 <p>

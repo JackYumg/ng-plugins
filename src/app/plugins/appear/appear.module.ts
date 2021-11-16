@@ -10,9 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from './markdown/markdown.component';
 import { NgMarkedPreviewComponent } from './ng-marked-preview/ng-marked-preview.component';
 import { NgMarkedEditorComponent } from './ng-marked-editor/ng-marked-editor.component';
-import { NgMarkedEditorModule } from 'projects/ng-marked-editor/src/public-api';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { EditorStorageService } from 'projects/ng-marked-editor/src/lib/editor-storage.service';
+import { NgMarkedEditorModule } from 'projects/ng-marked-editor/src/public-api';
 import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 
 
@@ -36,13 +35,11 @@ import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api
     ReactiveFormsModule
   ],
   providers: [
-    EditorStorageService
   ]
 })
 export class AppearModule {
   constructor(
-    private editorStorageService: EditorStorageService
   ) {
-    this.editorStorageService.clearAll();
+
   }
 }

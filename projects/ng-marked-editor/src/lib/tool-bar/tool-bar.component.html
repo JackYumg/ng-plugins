@@ -1,4 +1,4 @@
-<ul class="icon-ul">
+<ul class="icon-ul" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'">
     <li class="icon-ul-li" *ngFor="let i of baseGroup1" [title]="i.title">
         <span class="icon-ul-li-icon">
             <svg viewBox="0 0 1024 1024" (click)="itemClick(i , $event )">
@@ -15,7 +15,7 @@
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="overlay"
                 [cdkConnectedOverlayOpen]="baseTitlt.show">
                 <div name="tool" class="overlay-full">
-                    <ul name="tool" class="example-list">
+                    <ul name="tool" class="example-list" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'">
                         <li name="tool" (click)="itemClick(baseTitlt , $event , 1)">
                             <h1>一级标题</h1>
                         </li>
@@ -41,7 +41,7 @@
     </li>
 </ul>
 
-<span class="divider"></span>
+<span class="divider"  [class.dark]="theme === 'dark'" [class.default]="theme === 'default'"></span>
 
 <ul class="icon-ul">
     <li class="icon-ul-li" *ngFor="let i of baseGroup2">
@@ -53,7 +53,7 @@
     </li>
 </ul>
 
-<span class="divider"></span>
+<span class="divider" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'"></span>
 <ul class="icon-ul">
     <li class="icon-ul-li" *ngFor="let i of baseGroup3">
         <span class="icon-ul-li-icon" [title]="i.title">
@@ -65,7 +65,7 @@
 </ul>
 
 <!-- 更多功能 -->
-<span class="divider"></span>
+<span class="divider" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'"></span>
 <ul class="icon-ul">
     <li class="icon-ul-li" >
         <span class="icon-ul-li-icon" [title]="moreFunction[0].title" cdkOverlayOrigin #liuchengtu="cdkOverlayOrigin">
@@ -75,7 +75,7 @@
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="liuchengtu"
                 [cdkConnectedOverlayOpen]="moreFunction[0].show">
                 <div name="tool" class="overlay-full">
-                    <ul name="tool" class="example-list">
+                    <ul name="tool" class="example-list" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'">
                         <li name="tool" (click)="itemClick(moreFunction[0] , $event , 'lct')">
                             <h3>流程图</h3>
                         </li>
@@ -110,7 +110,7 @@
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="gongshi"
                 [cdkConnectedOverlayOpen]="moreFunction[1].show">
                 <div name="tool" class="overlay-full">
-                    <ul name="tool" class="example-list">
+                    <ul name="tool" class="example-list" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'">
                         <li name="tool"  (click)="itemClick(moreFunction[1] , $event , 'inner')">
                             <h3>行内公式</h3>
                         </li>
@@ -126,17 +126,12 @@
 
 <!--  -->
 <ng-container>
-    <span class="divider"></span>
+    <span class="divider" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'"></span>
     <ul class="icon-ul right">
         <li class="icon-ul-li" *ngFor="let i of optGroup">
-            <span class="icon-ul-li-icon" [title]="i.title" *ngIf="!i.disabled">
+            <span class="icon-ul-li-icon" [class.disabled]="i.disabled">
                 <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
                     <use [attr.xlink:href]="i.name"></use>
-                </svg>
-            </span>
-            <span class="icon-ul-li-icon disabled" *ngIf="i.disabled">
-                <svg viewBox="0 0 1024 1024" (click)="itemClick(i)">
-                    <use [attr.xlink:href]="i.disabledIcon"></use>
                 </svg>
             </span>
         </li>

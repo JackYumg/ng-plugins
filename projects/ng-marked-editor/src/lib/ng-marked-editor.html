@@ -1,5 +1,5 @@
-<div class="md-editor" [class.fangda]="editorState.zoom" #ngMarkedEditorTpl>
-    <lib-tool-bar [stateInstance]="editorStateManageInstance" [hasHistory]="hasHistory" class="md-editor-tool-bar" (clickEvent)="toolbarClick($event)"></lib-tool-bar>
+<div class="md-editor" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'" [class.fangda]="editorState.zoom" #ngMarkedEditorTpl>
+    <lib-tool-bar [stateInstance]="editorStateManageInstance" [hasHistory]="hasHistory" class="md-editor-tool-bar" [theme]="theme" (clickEvent)="toolbarClick($event)"></lib-tool-bar>
     <div class="md-editor-container">
         <textarea [disabled]="disabled" #textareaTpl [(ngModel)]="value"  class="md-editor-textarea" rows="16"></textarea>
         <ng-container>

@@ -3,5 +3,9 @@
   "dest": "../../dist/ng-marked-editor",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": [
+    "./src/assets",
+    "./src/assets/*"
+  ]
 }

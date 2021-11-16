@@ -4,11 +4,16 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { MdModalComponent } from '../md-modal/md-modal.component';
 import { EditorStateManageService } from '../editor-state-manage.service';
+import { ThemeType } from '../ng-marked-editor.component';
 @Component({
   selector: 'lib-tool-bar',
   templateUrl: './tool-bar.component.html',
   styleUrls: ['./tool-bar.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.dark]': 'theme === "dark"',
+    '[class.default]': 'theme === "default"'
+  }
 })
 export class ToolBarComponent implements OnInit, OnDestroy {
 
@@ -23,6 +28,10 @@ export class ToolBarComponent implements OnInit, OnDestroy {
 
   @Input()
   stateInstance?: EditorStateManageService;
+
+  @Input()
+  theme: ThemeType = 'default';
+
   baseGroup1 = [
     { name: '#icon-bold', title: '加粗', type: 'insert' },
     { name: '#icon-underline', title: '下划线', type: 'insert' },

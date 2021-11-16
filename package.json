@@ -22,7 +22,8 @@
     "dev:ssr": "ng run ng-plugins:serve-ssr",
     "serve:ssr": "node dist/ng-plugins/server/main.js",
     "build:ssr": "ng build --prod && ng run ng-plugins:server:production",
-    "prerender": "ng run ng-plugins:prerender"
+    "prerender": "ng run ng-plugins:prerender",
+    "pkg:all": "npm run pkg:preview && npm run pkg:marked"
   },
   "private": true,
   "dependencies": {
@@ -47,7 +48,7 @@
     "marked": "^3.0.3",
     "mermaid": "^8.13.0",
     "monaco-editor": "^0.23.0",
-    "ng-marked-preview": "^0.1.1",
+    "ng-marked-preview": "^0.2.1",
     "ng-zorro-antd": "^11.3.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

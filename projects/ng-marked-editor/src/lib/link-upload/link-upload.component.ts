@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseConfig } from '../data';
 import { MdModalService } from '../md-modal/md-modal.service';
+import { ThemeType } from '../ng-marked-editor.component';
 import { NgMarkedEditorService } from '../ng-marked-editor.service';
 type OptType = 'upload' | 'online' | 'cut';
 
@@ -25,6 +26,9 @@ export class LinkUploadComponent implements OnInit {
   desc = '';
   url = '';
   optType: OptType = 'upload';
+
+  @Input()
+  theme: ThemeType = 'default';
   constructor(
     private httpClient: HttpClient,
     private ngMarkedEditorService: NgMarkedEditorService,
@@ -56,8 +60,9 @@ export class LinkUploadComponent implements OnInit {
   }
 
   cancel(): void {
-    this.modalService.closeAll();
+    this.ngMarkedEditorService.fileUploadEvent.emit({ type: 'cancel' });
   }
+
 
   activeTab(type: OptType): void {
     this.optType = type;

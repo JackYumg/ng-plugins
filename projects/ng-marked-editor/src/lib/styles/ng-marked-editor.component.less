@@ -1,12 +1,32 @@
 :host {
     width: 100%;
-
     .md-editor {
+        &.dark{
+            @bc: #4b4b4b;
+            border: 1px solid @bc;
+            background: #000;
+            color: #999;
+            fill: #999;
+            .disabled {
+                fill:#363636;
+            }
+            .md-editor-textarea{
+                background: #000;
+            }
+            .md-editor-divider{
+                background: #999;
+            }
+        }
+        &.default{
+            border: 1px solid gainsboro;
+            background: #fff;
+            .md-editor-divider{
+                background: gainsboro;
+            }
+        }
         font-size: 16px;
         width: 100%;
         height: 100%;
-        border: 1px solid gainsboro;
-        background: transparent;
         &.fangda{
             position: fixed;
             z-index: 1;
@@ -15,6 +35,13 @@
         }
         &-tool-bar {
             width: 100%;
+            &.default{
+                border-bottom: 1px solid gainsboro;
+            }
+
+            &.dark {
+                border-bottom: 1px solid #999;
+            }
         }
 
         &-container {
@@ -24,7 +51,7 @@
 
         &-divider {
             width: 1px;
-            background: gainsboro;
+            // background: gainsboro;
             &.hidden{
                 display: none;
             }
@@ -46,22 +73,22 @@
             }
 
             &::-webkit-scrollbar-track {
-                background: rgb(239, 239, 239);
+                // background: rgb(239, 239, 239);
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb {
-                background: #bfbfbf;
+                // background: #bfbfbf;
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                background: darken(@barC , 0.3);
+                // background: darken(@barC , 0.3);
                 cursor: pointer;
             }
 
             &::-webkit-scrollbar-corner {
-                background: #179a16;
+                // background: #179a16;
             }
         }
 
@@ -90,17 +117,17 @@
             }
 
             &::-webkit-scrollbar-track {
-                background: rgb(239, 239, 239);
+                // background: rgb(239, 239, 239);
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb {
-                background: #bfbfbf;
+                // background: #bfbfbf;
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                background: darken(@barC , 0.3);
+                // background: darken(@barC , 0.3);
                 cursor: pointer;
             }
 
