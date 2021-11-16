@@ -12,10 +12,36 @@
             }
             .md-editor-textarea{
                 background: #000;
+                  /*修改滚动条样式*/
+                  &::-webkit-scrollbar {
+                    width: 5px;
+                    height: 5px;
+                    /**/
+                }
+    
+                &::-webkit-scrollbar-track {
+                    background: #999;
+                    border-radius: 5px;
+                }
+    
+                &::-webkit-scrollbar-thumb {
+                    background: #4b4b4b;
+                    border-radius: 5px;
+                }
+    
+                &::-webkit-scrollbar-thumb:hover {
+                    background: darken(@barC , 0.3);
+                    cursor: pointer;
+                }
+    
+                &::-webkit-scrollbar-corner {
+                    background: #000;
+                }
             }
             .md-editor-divider{
                 background: @bc;
             }
+
         }
         &.default{
             border: 1px solid gainsboro;
@@ -73,22 +99,22 @@
             }
 
             &::-webkit-scrollbar-track {
-                // background: rgb(239, 239, 239);
+                background: rgb(239, 239, 239);
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb {
-                // background: #bfbfbf;
+                background: #bfbfbf;
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                // background: darken(@barC , 0.3);
+                background: darken(@barC , 0.3);
                 cursor: pointer;
             }
 
             &::-webkit-scrollbar-corner {
-                // background: #179a16;
+                background: #179a16;
             }
         }
 
@@ -105,7 +131,8 @@
             flex: 1;
             // padding: 0.8em;
             height: 100%;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             &.hidden{
                 display: none;
             }
@@ -117,22 +144,22 @@
             }
 
             &::-webkit-scrollbar-track {
-                // background: rgb(239, 239, 239);
+                background: rgb(239, 239, 239);
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb {
-                // background: #bfbfbf;
+                background: #bfbfbf;
                 border-radius: 5px;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                // background: darken(@barC , 0.3);
+                background: darken(@barC , 0.3);
                 cursor: pointer;
             }
 
             &::-webkit-scrollbar-corner {
-                background: #179a16;
+                background: #000;
             }
 
         }
