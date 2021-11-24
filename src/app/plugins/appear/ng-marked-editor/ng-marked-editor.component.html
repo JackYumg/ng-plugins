@@ -8,7 +8,7 @@
             <a (click)="switchTheme('dark')">暗黑</a>
         </p>
         <div class="demo">
-            <lib-ng-marked-editor [theme]="theme" [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
+            <lib-ng-marked-editor [fileUploadChange]="fileUploadChange" [theme]="theme" [(ngModel)]="fg.value.text" (saveChange)="saveChange($event)" [option]="option"></lib-ng-marked-editor>
         </div>
     </app-sand-box>
 </div>

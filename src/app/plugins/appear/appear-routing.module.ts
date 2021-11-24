@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { DigitalComponent } from './digital/digital.component';
 import { MarkdownComponent } from './markdown/markdown.component';
-import { NgMarkedEditorComponent } from './ng-marked-editor/ng-marked-editor.component';
+import { NgMarkedEditorViewComponent } from './ng-marked-editor/ng-marked-editor.component';
 import { NgMarkedPreviewComponent } from './ng-marked-preview/ng-marked-preview.component';
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'color-picker', component: ColorPickerComponent },
   { path: 'markdown', component: MarkdownComponent },
   { path: 'marked', component: NgMarkedPreviewComponent },
-  { path: 'markdown-editor' , component: NgMarkedEditorComponent}
+  { path: 'markdown-editor' , component: NgMarkedEditorViewComponent}
 ];
 
 @NgModule({

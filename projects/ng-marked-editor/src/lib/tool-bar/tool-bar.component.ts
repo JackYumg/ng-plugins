@@ -5,6 +5,7 @@ import { fromEvent, Subscription } from 'rxjs';
 import { MdModalComponent } from '../md-modal/md-modal.component';
 import { EditorStateManageService } from '../editor-state-manage.service';
 import { ThemeType } from '../ng-marked-editor.component';
+import { NgMarkedEditorService } from '../ng-marked-editor.service';
 @Component({
   selector: 'lib-tool-bar',
   templateUrl: './tool-bar.component.html',
@@ -28,7 +29,8 @@ export class ToolBarComponent implements OnInit, OnDestroy {
 
   @Input()
   stateInstance?: EditorStateManageService;
-
+  @Input()
+  editorService?: NgMarkedEditorService;
   @Input()
   theme: ThemeType = 'default';
 
@@ -73,7 +75,7 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     { name: '#icon-fullScreen', bakName: '#icon-fullScreen-exit', type: 'editor-opt' },
     { name: '#icon-preview', bakName: '#icon-eye-close', type: 'editor-state' },
     { name: '#icon-coding', type: 'editor-state', title: '查看源代码', bakTitle: '预览效果' },
-    { name: '#icon-github' },
+    { name: '#icon-github', title: '源码地址' },
   ];
 
   titleOpen = false;
@@ -104,9 +106,13 @@ export class ToolBarComponent implements OnInit, OnDestroy {
     });
 
     this.initInvockOrNextState();
-    this.stateInstance?.toolEvent.subscribe( () => {
+    this.stateInstance?.toolEvent.subscribe(() => {
       this.initInvockOrNextState();
     });
+
+    // 控制图标展示
+    const option = this.editorService?.getOption();
+    console.log(option);
   }
 
   // 每个图标被点击时
@@ -129,6 +135,8 @@ export class ToolBarComponent implements OnInit, OnDestroy {
       if (e) {
         this.clickEvent.emit({ item: i, name, value: e });
       }
+    } else if (name === 'github') {
+      window.open('https://github.com/JackYumg/ng-plugins/tree/main/projects/ng-marked-editor', '__target');
     } else {
       this.clickEvent.emit({ item: i, name });
     }

@@ -1,11 +1,13 @@
 <ul class="icon-ul" [class.dark]="theme === 'dark'" [class.default]="theme === 'default'">
-    <li class="icon-ul-li" *ngFor="let i of baseGroup1" [title]="i.title">
-        <span class="icon-ul-li-icon">
-            <svg viewBox="0 0 1024 1024" (click)="itemClick(i , $event )">
-                <use [attr.xlink:href]="i.name"></use>
-            </svg>
-        </span>
-    </li>
+    <ng-container *ngFor="let i of baseGroup1" >
+        <li class="icon-ul-li" [title]="i.title">
+            <span class="icon-ul-li-icon">
+                <svg viewBox="0 0 1024 1024" (click)="itemClick(i , $event )">
+                    <use [attr.xlink:href]="i.name"></use>
+                </svg>
+            </span>
+        </li>
+    </ng-container>
 
     <li class="icon-ul-li">
         <span class="icon-ul-li-icon" cdkOverlayOrigin #overlay="cdkOverlayOrigin">

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgMarkedEditorComponent } from './ng-marked-editor.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
-import { PortalModule} from '@angular/cdk/portal';
+import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MdModalComponent } from './md-modal/md-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
@@ -12,6 +12,7 @@ import { MainModalComponent } from './main-modal/main-modal.component';
 import { MainModalDirective } from './main-modal/main-modal.directive';
 import { MainModalFooterComponent } from './main-modal/main-modal-footer/main-modal-footer.component';
 import { TranslatePipe } from './translate.pipe';
+import { EditorStorageService } from './editor-storage.service';
 import { NgMarkedPreviewModule } from 'ng-marked-preview';
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { NgMarkedPreviewModule } from 'ng-marked-preview';
     MainModalDirective,
     MainModalFooterComponent,
     TranslatePipe,
- ],
+  ],
   imports: [
     NgMarkedPreviewModule,
     FormsModule,
@@ -34,9 +35,18 @@ import { NgMarkedPreviewModule } from 'ng-marked-preview';
     PortalModule
   ],
   exports: [
+    NgMarkedPreviewModule,
     NgMarkedEditorComponent,
+    TranslatePipe
   ],
   providers: [
+    EditorStorageService
   ]
 })
-export class NgMarkedEditorModule { }
+export class NgMarkedEditorModule {
+  constructor(
+    private editorStorageService: EditorStorageService
+  ) {
+    this.editorStorageService.clearAll();
+  }
+}

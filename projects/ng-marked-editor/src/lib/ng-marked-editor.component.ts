@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component,
   ElementRef, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
-import { fromEvent, fromEventPattern } from 'rxjs';
+import { fromEvent, fromEventPattern, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { NgMarkedEditorOption } from './types/editor';
 import { EditorOptService } from './editor-opt.service';
@@ -38,21 +38,31 @@ export type ThemeType = 'default' | 'dark';
     EditorStateManageService,
     EditorStorageService,
     MainModalService,
-    MarkedEditorAccessor
+    MarkedEditorAccessor,
+    NgMarkedEditorService
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueAccessor {
+
+  optionValue?: NgMarkedEditorOption;
   @Input()
-  option: NgMarkedEditorOption = {
-    saveOption: {
-      autoSave: false,
-    },
-  };
+  set option(option: NgMarkedEditorOption) {
+    this.optionValue = option;
+    this.optionValue = Object.assign(this.optionValue, option);
+    this.ngMarkedEditorService.setOption(this.optionValue);
+  }
+
+  get option(): NgMarkedEditorOption {
+    return this.optionValue || this.ngMarkedEditorService.getDefaultOption();
+  }
 
   // 点击保存时向外面抛出事件
   @Output()
   saveChange = new EventEmitter<string>();
+
+  @Input()
+  fileUploadChange?: (file: File) => any;
 
   private appKey = '';
   // 服务实列传递给子组件使用
@@ -138,6 +148,7 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
   }
 
   ngOnInit(): void {
+    this.option = this.ngMarkedEditorService.getDefaultOption();
     this.subscribeModalEvent();
     this.createAppKey();
     this.autoSaveConfig();
@@ -202,14 +213,16 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
           content: ImageUploadComponent,
           modalParams: {
             title: '10086',
-            theme: this.theme
+            theme: this.theme,
+            ngMarkedEditorService: this.ngMarkedEditorService
           }
         });
       } else if (name === 'link') {
         this.mainModalService.create({
           content: LinkUploadComponent,
           modalParams: {
-            theme: this.theme
+            theme: this.theme,
+            ngMarkedEditorService: this.ngMarkedEditorService
           }
         });
       }
@@ -333,6 +346,23 @@ export class NgMarkedEditorComponent implements OnInit, OnDestroy, ControlValueA
         this.mainModalService.closeAll();
       } else if (type === 'cancel') {
         this.mainModalService.closeAll();
+      }
+    });
+
+    this.ngMarkedEditorService.beforeUploadEvent.subscribe((file: File) => {
+      if (this.fileUploadChange) {
+        const res = this.fileUploadChange(file);
+        if (res instanceof Promise) {
+          res.then((path: string) => {
+            this.ngMarkedEditorService.afterUploadEvent.emit(path);
+          });
+        } else if (res instanceof Observable) {
+          res.subscribe((path: string) => {
+            this.ngMarkedEditorService.afterUploadEvent.emit(path);
+          });
+        }
+      } else {
+        throw new Error('is the option of customUpload is true , the fileuploadChange is must be set');
       }
     });
   }

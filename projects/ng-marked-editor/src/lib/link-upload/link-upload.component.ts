@@ -29,9 +29,10 @@ export class LinkUploadComponent implements OnInit {
 
   @Input()
   theme: ThemeType = 'default';
+  @Input()
+  private ngMarkedEditorService?: NgMarkedEditorService;
   constructor(
     private httpClient: HttpClient,
-    private ngMarkedEditorService: NgMarkedEditorService,
     private modalService: MdModalService
   ) { }
 
@@ -55,12 +56,12 @@ export class LinkUploadComponent implements OnInit {
   }
 
   confirm(): void {
-    this.ngMarkedEditorService.fileUploadEvent.emit({ path: this.url, desc: this.desc, type: 'link' });
+    this.ngMarkedEditorService?.fileUploadEvent.emit({ path: this.url, desc: this.desc, type: 'link' });
     this.modalService.closeAll();
   }
 
   cancel(): void {
-    this.ngMarkedEditorService.fileUploadEvent.emit({ type: 'cancel' });
+    this.ngMarkedEditorService?.fileUploadEvent.emit({ type: 'cancel' });
   }
 
 

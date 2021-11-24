@@ -18,20 +18,18 @@ export class ColorPickerComponent implements OnInit {
       constructor() {
         console.log(this);
       }
-    
       ngOnInit(): void {
         setInterval(() => {
           this.count += 1;
         }, 1000);
       }
-    
     }
     ` , lang: 'typescript'
     }
   ];
 
-  colorChange($event:any){
-    
+  colorChange($event: any): void {
+    // don
   }
   constructor() { }
 

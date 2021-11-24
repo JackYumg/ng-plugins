@@ -13,7 +13,7 @@ const escapeReplacements: { [key: string]: string } = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  "'": '&#39;'
+  '\'': '&#39;'
 };
 const getEscapeReplacement = (ch: string) => escapeReplacements[ch];
 function escape(html: string, encode: boolean): string {

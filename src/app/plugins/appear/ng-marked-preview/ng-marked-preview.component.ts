@@ -12,7 +12,7 @@ export class NgMarkedPreviewComponent implements OnInit {
   previewText = '';
   fileList: FileItem[] = [
     { name: 'index.html', lang: 'html', content: '<lib-ng-marked-preview [context]="previewText" ></lib-ng-marked-preview>' },
-    { name: 'marked.md' , lang: 'md' , content: ''},
+    { name: 'marked.md', lang: 'md', content: '' },
     {
       name: 'index.ts', lang: 'typescript', content: `
       import { Component, OnInit } from '@angular/core';
@@ -61,6 +61,10 @@ export class NgMarkedPreviewComponent implements OnInit {
       this.fileList[1].content = e.trim();
       this.cdk.detectChanges();
     });
+  }
+
+  valueChagneed($event: any): void {
+    console.log(arguments);
   }
 
 }
