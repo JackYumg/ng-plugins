@@ -48,7 +48,16 @@
               "src/styles.less"
             ],
             "scripts": [
-              
+              "./node_modules/marked/marked.min.js",
+              "./node_modules/katex/dist/katex.min.js",
+              "./node_modules/mermaid/dist/mermaid.min.js",
+              "./node_modules/highlightjs/highlight.pack.min.js",
+              "./node_modules/prettier/standalone.js",
+              "./node_modules/prettier/parser-markdown.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "mermaid",
+              "highlight.js"
             ]
           },
           "configurations": {

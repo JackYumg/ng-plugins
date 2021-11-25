@@ -1,6 +1,8 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode, ImageNode, RefrenceNode, CodeWordNode, TagNode, UListNode, OListNode, LiNode } from './vnode';
-import * as hljs from 'highlightjs';
+import {
+    LinkNode, VNode, HeaderNode, ItaltcNode, BoldNode, TableNode, TrNode, TdNode,
+    ImageNode, RefrenceNode, CodeWordNode, TagNode, UListNode, OListNode, LiNode
+} from './vnode';
 import { fromEvent } from 'rxjs';
 import { NgEditorMarkdownService } from './../lib/ng-editor-markdown.service';
 type ReturnType = HTMLElement | Text | HTMLTableElement;
@@ -168,8 +170,12 @@ export class TokenTree {
         if (codewordNode.context) {
             a.innerText = codewordNode.context;
         }
-        const e: string = hljs.highlightAuto(codewordNode.context || '', [codewordNode.lg]).value;
-        a.innerHTML = e;
+        if ((window as any).hljs) {
+            const e: string = (window as any).hljs.highlightAuto(codewordNode.context || '', [codewordNode.lg]).value;
+            a.innerHTML = e;
+        } else {
+            a.innerHTML = codewordNode.context;
+        }
 
         // 加入复制代码按钮
         const span: HTMLSpanElement = this.renderer2.createElement('span');

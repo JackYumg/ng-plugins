@@ -1,6 +1,4 @@
 import { ElementRef, Injectable } from '@angular/core';
-import * as prettier from 'prettier';
-import * as plugins from 'prettier/parser-markdown';
 import { MdSelection, ResTrans } from './types/editor';
 import { lctDefaultValue } from './data';
 @Injectable()
@@ -64,7 +62,18 @@ export class EditorOptService {
 
   // 格式化代码
   prettier = (value: string = ''): string => {
-    return prettier.format(value, { semi: false, parser: 'markdown', plugins: [plugins] });
+    const { prettierPlugins, prettier } = (window as any);
+    if (prettierPlugins && prettier) {
+      const { format } = prettier;
+      const { parsers } = prettierPlugins.markdown ? prettierPlugins.markdown : { parsers: null };
+      if (parsers) {
+        return format(value, { semi: false, parser: 'markdown', plugins: [{ parsers }] });
+      } else {
+        return value;
+      }
+    } else {
+      return value;
+    }
   }
 
   // 放大
@@ -465,8 +474,8 @@ export class EditorOptService {
     };
   }
 
-   // 无序列表
-   ulList(text: string, selection: MdSelection): ResTrans {
+  // 无序列表
+  ulList(text: string, selection: MdSelection): ResTrans {
     let value = '';
     let selectStart = 2;
     let selectEnd = 0;

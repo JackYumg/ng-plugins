@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as marked from 'marked';
-import * as hljs from 'highlight.js';
-import * as katex from 'katex';
-import * as mermaid from 'mermaid';
 const escapeTest = /[&<>"']/;
 const escapeReplace = /[&<>"']/g;
 const escapeTestNoEncode = /[<>"']|&(?!#?\w+;)/;
@@ -36,26 +32,34 @@ const unescapeTest = /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/ig;
 })
 export class MarkBaseService {
 
-  private markInstance = marked;
+  private markInstance = (window as any).marked;
   private baseOption = {
 
   };
   // 默认扩展了的渲染器
   private defaultRender = {
     code: (text: string, infostring: string) => {
+      const { mermaid, hljs } = (window as any)
       const lang = ((infostring || '').match(/\S*/) || [])[0] || '';
       if (lang === 'mermaid') {
-        const id = `theGraph${new Date().getTime()}`;
-        const rended = mermaid.default.mermaidAPI.render(id, text);
-        return rended;
-      } else {
-        const e: string = hljs.default.highlightAuto(text, [lang]).value;
+        if (mermaid) {
+          const id = `theGraph${new Date().getTime()}`;
+          const rended = mermaid.mermaidAPI.render(id, text);
+          return rended;
+        } else {
+          return `<pre class="language-${lang}"><code>${text}</code>${this.copyCode}</pre>`;
+        }
+      } else if (hljs) {
+        const e: string = hljs.highlightAuto(text, [lang]).value;
         return `<pre class="language-${lang}"><code>${e}</code>${this.copyCode}</pre>`;
+      } else {
+        return `<pre class="language-${lang}"><code>${text}</code>${this.copyCode}</pre>`;
       }
     },
     text: (text: string) => {
       const match = text.match(/^\$\$\n[\s|\S]+\n\$\$$/);
-      if (match) {
+      const katex = (window as any).katex;
+      if (match && katex) {
         text = match[0].split(/^[\$]+|[\$]+$/).join('').split('\n').join('');
         const html = katex.renderToString(text, { throwOnError: false });
         return html;
