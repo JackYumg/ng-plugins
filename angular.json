@@ -52,8 +52,14 @@
               "./node_modules/katex/dist/katex.min.js",
               "./node_modules/mermaid/dist/mermaid.min.js",
               "./node_modules/highlightjs/highlight.pack.min.js",
-              "./node_modules/prettier/standalone.js",
-              "./node_modules/prettier/parser-markdown.js"
+              {
+                "input": "./node_modules/prettier/standalone.js",
+                "bundleName": "prettir"
+              },
+              {
+                "input": "./node_modules/prettier/parser-markdown.js",
+                "bundleName": "prettir_markdown"
+              }
             ],
             "allowedCommonJsDependencies": [
               "mermaid",

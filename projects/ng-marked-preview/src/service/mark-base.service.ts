@@ -32,14 +32,14 @@ const unescapeTest = /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/ig;
 })
 export class MarkBaseService {
 
-  private markInstance = (window as any).marked;
+  private markInstance = (window as any).marked.marked;
   private baseOption = {
 
   };
   // 默认扩展了的渲染器
   private defaultRender = {
     code: (text: string, infostring: string) => {
-      const { mermaid, hljs } = (window as any)
+      const { mermaid, hljs } = (window as any);
       const lang = ((infostring || '').match(/\S*/) || [])[0] || '';
       if (lang === 'mermaid') {
         if (mermaid) {
@@ -98,14 +98,26 @@ export class MarkBaseService {
   // 以下是开放给用户的接口
 
   toHtml(context: string = ''): string {
-    return this.markInstance(context, this.baseOption);
+    if (this.markInstance.marked) {
+      return this.markInstance.marked(this.baseOption);
+    } else {
+      return this.markInstance(context, this.baseOption);
+    }
   }
 
   useRender(renderer: any): void {
-    this.markInstance.use({ renderer: { ...this.defaultRender, ...renderer } });
+    if (this.markInstance.use) {
+      this.markInstance.use({ renderer: { ...this.defaultRender, ...renderer } });
+    } else if (this.markInstance.marked && this.markInstance.use) {
+      this.markInstance.marked.use({ renderer: { ...this.defaultRender, ...renderer } });
+    }
   }
 
   useToken(tokenizer: any): void {
-    this.markInstance.use({ tokenizer: { ...this.defaultTokenizer, ...tokenizer } });
+    if (this.markInstance.use) {
+      this.markInstance.use({ tokenizer: { ...this.defaultTokenizer, ...tokenizer } });
+    } else if (this.markInstance.marked && this.markInstance.use) {
+      this.markInstance.marked.use({ tokenizer: { ...this.defaultTokenizer, ...tokenizer } });
+    }
   }
 }

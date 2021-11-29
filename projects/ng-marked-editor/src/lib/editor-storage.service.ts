@@ -5,6 +5,7 @@ import { audit } from 'rxjs/operators';
 @Injectable()
 export class EditorStorageService {
 
+  localStorage = window.localStorage;
   config = {
     appkey: '',
     timer: 10000 // 默认十秒钟
@@ -28,11 +29,11 @@ export class EditorStorageService {
   }
 
   private save(value: string): void {
-    localStorage.setItem(`savePath_${this.config.appkey}`, value);
+    this.localStorage.setItem(`savePath_${this.config.appkey}`, value);
   }
 
   destory(): void {
-    localStorage.removeItem(`savePath_${this.config.appkey}`);
+    this.localStorage.removeItem(`savePath_${this.config.appkey}`);
   }
 
   saveImidet(value: string): void {
@@ -40,10 +41,10 @@ export class EditorStorageService {
   }
 
   clearAll(): void {
-    const keys = Object.keys(localStorage);
+    const keys = Object.keys(this.localStorage);
     keys.forEach((key) => {
       if (/^savePath/.test(key)) {
-        localStorage.removeItem(key);
+        this.localStorage.removeItem(key);
       }
     });
   }

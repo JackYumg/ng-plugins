@@ -13,7 +13,7 @@ import { MainModalDirective } from './main-modal/main-modal.directive';
 import { MainModalFooterComponent } from './main-modal/main-modal-footer/main-modal-footer.component';
 import { TranslatePipe } from './translate.pipe';
 import { EditorStorageService } from './editor-storage.service';
-import { NgMarkedPreviewModule } from 'ng-marked-preview';
+import { NgMarkedPreviewModule } from 'projects/ng-marked-preview/src/public-api';
 @NgModule({
   declarations: [
     NgMarkedEditorComponent,
