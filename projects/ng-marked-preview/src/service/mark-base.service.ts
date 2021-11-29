@@ -106,6 +106,9 @@ export class MarkBaseService {
   }
 
   useRender(renderer: any): void {
+    if (!this.markInstance) {
+      this.markInstance = (window as any).marked.marked ? (window as any).marked.marked : (window as any).marked;
+    }
     if (this.markInstance.use) {
       this.markInstance.use({ renderer: { ...this.defaultRender, ...renderer } });
     } else if (this.markInstance.marked && this.markInstance.use) {
@@ -114,6 +117,9 @@ export class MarkBaseService {
   }
 
   useToken(tokenizer: any): void {
+    if (!this.markInstance) {
+      this.markInstance = (window as any).marked.marked ? (window as any).marked.marked : (window as any).marked;
+    }
     if (this.markInstance.use) {
       this.markInstance.use({ tokenizer: { ...this.defaultTokenizer, ...tokenizer } });
     } else if (this.markInstance.marked && this.markInstance.use) {
