@@ -1,27 +1,19 @@
-# NgPlugins
+# 插件列表
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.7.
+## ng-marked-editor
 
-## Development server
+基于[markedjs](https://marked.js.org/)和Angular开发的markdown编辑器
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- 支持绝大多数Markdown规范
+- 支持流程图 [mermaid](https://mermaid-js.github.io/mermaid/#/)
+- 支持数学公式 [katex](https://katex.org/)
+- 编辑器代码语法高亮[highlight.js](https://highlightjs.org/)
+- 支持主题切换
+- 支持Angular表单系统
 
-## Code scaffolding
+## ng-markded-editor
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+供于Markdown文档预览，独立开发出来的目的尽可能减少打包体积
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+> 支持功能与ng-marked-editor一致，表单除外
